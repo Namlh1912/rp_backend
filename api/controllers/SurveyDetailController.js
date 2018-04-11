@@ -1,6 +1,6 @@
 const moment = require('moment');
 
-const SurveyProvider = require('../providers/SurveyProvider');
+const SurveyDetailProvider = require('../providers/SurveyDetailProvider');
 const ProductProvider = require('../providers/ProductProvider');
 const ControllerBase = require('./ControllerBase');
 
@@ -16,24 +16,17 @@ class SurveyController extends ControllerBase {
 		]
 	}
 
-	get surveyProvider() {
+	get surveyDetailProvider() {
 		if (!this._provider) {
-			this._provider = new SurveyProvider();
+			this._provider = new SurveyDetailProvider();
 		}
 		return this._provider;
-	}
-
-	get productProvider() {
-		if (!this._productProvider) {
-			this._productProvider = new ProductProvider();
-		}
-		return this._productProvider;
 	}
 
 	async create(request, response) {
 		try {
 			let surveyData = request.body;
-			const survey = await this.surveyProvider.create(surveyData);
+			const survey = await this.surveyDetailProvider.create(surveyData);
 			return response.ok(survey);
 		} catch (err) {
 			sails.log.error(err);
@@ -49,7 +42,7 @@ class SurveyController extends ControllerBase {
 	async detail(request, response) {
 		let id = parseInt(request.param('id'), 10);
 		try {
-			const detail = await this.surveyProvider.detail(id)
+			const detail = await this.surveyDetailProvider.detail(id)
 			if (detail) {
 				return response.ok(detail)
 			}
@@ -71,7 +64,7 @@ class SurveyController extends ControllerBase {
 						themes: groups
 					};
 				}
-				return this.surveyProvider.delete(id);
+				return this.surveyDetailProvider.delete(id);
 			})
 			.then(deleted => {
 				if (Array.isArray(deleted)) {
@@ -94,7 +87,7 @@ class SurveyController extends ControllerBase {
 
 	async list(request, response) {
 		try {
-			let list = await this.surveyProvider.list();
+			let list = await this.surveyDetailProvider.list();
 			return response.ok(list);
 		} catch (err) {
 			sails.log.error(err);
@@ -119,7 +112,7 @@ class SurveyController extends ControllerBase {
 	searchByName(request, response) {
 		let name = request.param('name');
 		if (name) {
-			this.surveyProvider.getByName(name).then(res => {
+			this.surveyDetailProvider.getByName(name).then(res => {
 				if (res.length) {
 					return response.ok(res);
 				} else {
