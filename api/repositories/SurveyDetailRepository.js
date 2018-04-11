@@ -20,8 +20,6 @@ class SurveyDetailRepository {
 		});
 	}
 
-	
-
 	remove(id) {
 		return this._SurveyDetailModel.destroyAsync({
 			id: id

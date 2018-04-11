@@ -20,17 +20,13 @@ class QuestionRepository {
 		});
 	}
 
-	async getBySurvey(id) {
-		try {
-			const res = await this._QuestionModel.queryAsync(`
-				select q.*, t.type from questions q
-				left outer join question_types t on q.questionType = t.id
-				where q.surveyId = ${id}
-			`, []);
-			return res;
-		} catch (err) {
-			sails.log.error(err);
-		}
+	getBySurvey(id) {
+		return this._QuestionModel.queryAsync(`
+			select q.*, t.type from questions q
+			left outer join question_types t on q.questionType = t.id
+			where q.surveyId = ${id}`, [])
+			.then(res => res)
+			.catch(err => sails.log.error(err));
 	}
 
 	remove(id) {

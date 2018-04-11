@@ -24,23 +24,19 @@ class UserController extends ControllerBase {
 		return this._provider;
 	}
 
-	async create(request, response) {
+	create(request, response) {
 		let body = request.body;
-		try {
-			let check = await this.userProvider.checkUsername(body.email);
+		this.userProvider.checkUsername(body.username).then(check => {
 			if (check) {
 				return response.forbidden('This username is being used!');
 			}
-			this.userProvider.create(body)
-				.then(async res => response.ok(res))
-				.catch(err => {
-					sails.log.error(err);
-					response.serverError('Cannot create this user');
-				});
-		} catch (err) {
+			return this.userProvider.create(body);
+		}).then(res => {
+			if (res.id) { return response.ok(res); }
+		}).catch(err => {
 			sails.log.error(err);
 			response.serverError('Cannot create this user');
-		}
+		});
 	}
 
 	delete(request, response) {
@@ -86,24 +82,24 @@ class UserController extends ControllerBase {
 		});
 	}
 
-	async login(request, response) {
-		try {
-			let client = request.body;
-			if (!client.username || !client.password) {
-				return response.notFound('Cannot find this user');
-			}
-			let user = await this.userProvider.login(client);
+	login(request, response) {
+		let client = request.body;
+		if (!client.username || !client.password) {
+			return response.notFound('Cannot find this user');
+		}
+		this.userProvider.login(client).then(user => {
 			if (!user) {
 				return response.forbidden('Login failed');
 			}
-			let authUser = await this.createToken(user);
-			if (authUser) {
-				return response.ok(user);
+			return this.createToken(user);
+		}).then(authUser => {
+			if (authUser.id) {
+				return response.ok(authUser);
 			}
-		} catch (ex) {
+		}).catch(ex => {
 			sails.log.error('login', ex.stack);
 			return response.serverError('Login failed');
-		}
+		});
 	}
 
 	//#region private

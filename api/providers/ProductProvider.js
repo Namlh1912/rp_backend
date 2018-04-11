@@ -11,7 +11,6 @@ const FileUtil = require('../util/FileUtil');
 
 const TMP_UPLOAD_PATH = path.join(process.cwd(), '.tmp', 'public', 'images', 'upload');
 const IMG_PATH = path.join(process.cwd(), 'assets', 'images', 'upload');
-const TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 const PRODUCT_STATUS = {
 	available: 'available',
 	unavailable: 'unavailable'
@@ -39,7 +38,7 @@ class ProductProvider {
 		return this._categoryRepo;
 	}
 
-	async create(product) {
+	create(product) {
 		const thumbnailPath = path.join(TMP_UPLOAD_PATH, `thumbnail-${product.imgLink}`);
 		return jimpReadAsync(path.join(IMG_PATH, product.imgLink)).then(jimpFile => {
 			return this.resizeImage(350, jimpFile, thumbnailPath);

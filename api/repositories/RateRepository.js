@@ -20,19 +20,14 @@ class RateRepository {
 		});
 	}
 
-	async getRateReport(pageIndex) {
+	getRateReport(pageIndex) {
 		const skip = 30 * (pageIndex - 1);
-		try {
-			const res = await this._RateModel.queryAsync(`
+		return this._RateModel.queryAsync(`
 				select r.rating, r.feedback, c.*, p.name as product from rates r
 				left outer join customers c on r.customerId = c.id
 				left outer join products p on r.productId = p.id
 				limit 30 offset ${skip} order by r.id
 			`, []);
-			return res;
-		} catch (err) {
-			sails.log.error(err);
-		}
 	}
 
 	remove(id) {

@@ -31,7 +31,7 @@ class UserProvider {
 			});
 	}
 
-	checkUsername(name){
+	checkUsername(name) {
 		return this.userRepo.checkUsername(name);
 	}
 
@@ -39,21 +39,11 @@ class UserProvider {
 		return this.userRepo.remove(id).catch(err => sails.log.error(err));
 	}
 
-	async detail(id) {
-		try {
-			let user = await this.userRepo.getDetail(id);
+	detail(id) {
+		return this.userRepo.getDetail(id).then(user => {
 			this.removePrivateProp(user);
 			return user;
-		} catch (er) {
-			sails.log.error(er);
-			return null;
-		}
-	}
-
-	async googleLogin(user) {
-		let loggedUser = await this.userRepo.googleLogin(user);
-		this.removePrivateProp(loggedUser);
-		return loggedUser ? loggedUser : null;
+		}).catch(err => sails.log.error(err));
 	}
 
 	async login(user) {
@@ -70,16 +60,11 @@ class UserProvider {
 		return null;
 	}
 
-	async list() {
-		try {
-
-			let list = await this.userRepo.getList();
+	list() {
+		return this.userRepo.getList().then(list => {
 			list.forEach(user => this.removePrivateProp(user));
 			return list;
-		}
-		catch(err) {
-			sails.log.error(err);
-		}
+		}).catch(err => sails.log.error(err));
 	}
 
 	update(data) {
