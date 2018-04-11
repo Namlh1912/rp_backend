@@ -1,63 +1,58 @@
-const moment = require('moment');
+const moment = require("moment")
 
-const ProductProvider = require('../providers/ProductProvider');
-const CustomerProvider = require('../providers/CustomerProvider');
-const RateProvider = require('../providers/rateProvider');
-const ControllerBase = require('./ControllerBase');
+const ProductProvider = require("../providers/ProductProvider")
+const CustomerProvider = require("../providers/CustomerProvider")
+const RateProvider = require("../providers/RateProvider")
+const ControllerBase = require("./ControllerBase")
 
 // const SERVER = 'http://localhost:1337';
 
 class OrderController extends ControllerBase {
-
 	constructor() {
-		super();
-		this._exportedMethods = [
-		];
+		super()
+		this._exportedMethods = []
 	}
 
 	get productProvider() {
 		if (!this._productProvider) {
-			this._productProvider = new ProductProvider();
+			this._productProvider = new ProductProvider()
 		}
-		return this._productProvider;
+		return this._productProvider
 	}
 
 	get rateProvider() {
 		if (!this._rateProvider) {
-			this._rateProvider = new RateProvider();
+			this._rateProvider = new RateProvider()
 		}
-		return this._rateProvider;
+		return this._rateProvider
 	}
 
 	get customerProvider() {
 		if (!this._customerProvider) {
-			this._customerProvider = new CustomerProvider();
+			this._customerProvider = new CustomerProvider()
 		}
-		return this._customerProvider;
+		return this._customerProvider
 	}
 
 	async create(request, response) {
-		const customer = request.body['customer'];
-		const rates = request.body['rates'];
+		const customer = request.body["customer"]
+		const rates = request.body["rates"]
 		try {
-			const cus = await this.customerProvider.create(customer);
-			let rateProm = [];
+			const cus = await this.customerProvider.create(customer)
+			let rateProm = []
 			rates.forEach(el => {
-				el.customerId = cus.id;
-				rateProm.push(this.rateProvider.create(el));
-			});
-			await Promise.all(rateProm);
-			response.status(204);
-			return response.send();
+				el.customerId = cus.id
+				rateProm.push(this.rateProvider.create(el))
+			})
+			await Promise.all(rateProm)
+			response.status(204)
+			return response.send()
 		} catch (err) {
-			return response.serverError('Cannot create rate.');
+			return response.serverError("Cannot create rate.")
 		}
 	}
 
-	delete(request, response) {
-
-	}
-
+	delete(request, response) {}
 
 	async detail(request, response) {
 		// try {
@@ -73,7 +68,6 @@ class OrderController extends ControllerBase {
 		// 			delete product.quantity;
 		// 			return { product, quantity }
 		// 		});
-
 		// 		order.productOrders = newProducts;
 		// 		return response.ok(order);
 		// 	}
@@ -86,7 +80,7 @@ class OrderController extends ControllerBase {
 	}
 
 	getNow() {
-		return moment().utc();
+		return moment().utc()
 	}
 
 	list(request, response) {
@@ -200,4 +194,4 @@ class OrderController extends ControllerBase {
 	}
 }
 
-module.exports = new OrderController().exports();
+module.exports = new OrderController().exports()
