@@ -3,9 +3,6 @@ const moment = require('moment');
 const CustomerProvider = require('../providers/CustomerProvider');
 const ControllerBase = require('./ControllerBase');
 
-const TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
-
-
 class CustomerController extends ControllerBase {
 
 	constructor() {

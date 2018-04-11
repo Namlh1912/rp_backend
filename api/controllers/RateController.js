@@ -1,10 +1,4 @@
 const moment = require('moment');
-const firebase = require("firebase-admin");
-const serviceAccount = require('../../firebase/dash-button-be0d8-firebase-adminsdk-ta0bl-c8266986a4');
-firebase.initializeApp({
-	credential: firebase.credential.cert(serviceAccount),
-	databaseURL: "https://dash-button-be0d8.firebaseio.com"
-});
 
 const ProductProvider = require('../providers/ProductProvider');
 const CustomerProvider = require('../providers/CustomerProvider');
