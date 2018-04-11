@@ -5,9 +5,6 @@ const CategoryProvider = require('../providers/CategoryProvider');
 const ProductProvider = require('../providers/ProductProvider');
 const ControllerBase = require('./ControllerBase');
 
-const TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
-
-
 class CategoryController extends ControllerBase {
 
 	constructor() {

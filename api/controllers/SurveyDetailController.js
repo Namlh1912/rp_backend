@@ -4,6 +4,9 @@ const SurveyProvider = require('../providers/SurveyProvider');
 const ProductProvider = require('../providers/ProductProvider');
 const ControllerBase = require('./ControllerBase');
 
+const TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+
+
 class SurveyController extends ControllerBase {
 
 	constructor() {
