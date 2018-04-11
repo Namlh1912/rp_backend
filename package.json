@@ -49,10 +49,14 @@
 		"debug": "node debug app.js",
 		"start": "node app.js"
 	},
+	"engines": {
+		"node": "8"
+	},
 	"main": "app.js",
 	"repository": {
 		"type": "git",
-		"url": "git://github.com/anonymous node/sails user/back-rest-photobooth-admin2.git"
+		"url":
+			"git://github.com/anonymous node/sails user/back-rest-photobooth-admin2.git"
 	},
 	"author": "anonymous node/sails user",
 	"license": ""
