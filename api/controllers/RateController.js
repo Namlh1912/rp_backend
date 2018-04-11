@@ -2,7 +2,7 @@ const moment = require('moment');
 
 const ProductProvider = require('../providers/ProductProvider');
 const CustomerProvider = require('../providers/CustomerProvider');
-const RateProvider = require('../providers/rateProvider');
+const RateProvider = require('../providers/RateProvider');
 const ControllerBase = require('./ControllerBase');
 
 // const SERVER = 'http://localhost:1337';
@@ -36,22 +36,23 @@ class OrderController extends ControllerBase {
 		return this._customerProvider;
 	}
 
-	async create(request, response) {
+	create(request, response) {
 		const customer = request.body['customer'];
 		const rates = request.body['rates'];
-		try {
-			const cus = await this.customerProvider.create(customer);
+		this.customerProvider.create(customer).then(cus => {
 			let rateProm = [];
 			rates.forEach(el => {
 				el.customerId = cus.id;
 				rateProm.push(this.rateProvider.create(el));
 			});
-			await Promise.all(rateProm);
+			return Promise.all(rateProm);
+		}).then(() => {
 			response.status(204);
 			return response.send();
-		} catch (err) {
+		}).catch(err => {
+			sails.log.error(err);
 			return response.serverError('Cannot create rate.');
-		}
+		});
 	}
 
 	delete(request, response) {
@@ -59,7 +60,7 @@ class OrderController extends ControllerBase {
 	}
 
 
-	async detail(request, response) {
+	detail(request, response) {
 		// try {
 		// 	let id = parseInt(request.param('id'), 10);
 		// 	let [products, order] = await Promise.all([
@@ -124,7 +125,7 @@ class OrderController extends ControllerBase {
 		// 	});
 	}
 
-	async getByrateId(request, response) {
+	getByrateId(request, response) {
 		// try {
 		// 	let rateId = request.param('id');
 		// 	let [rate, orders] = await Promise.all([

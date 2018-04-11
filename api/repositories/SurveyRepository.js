@@ -8,11 +8,11 @@ class SurveyRepository {
 	}
 
 	create(data) {
-		return this._SurveyModel.create(data);
+		return Survey.create(data);
 	}
 
 	getList() {
-		return Survey.find({sort: 'id DESC'})
+		return Survey.find({ sort: 'id DESC' })
 			.then(res => {
 				return res;
 			})
@@ -37,14 +37,8 @@ class SurveyRepository {
 		return this._SurveyModel.update({ id: data.id }, data);
 	}
 
-	async remove(SurveyId) {
-		try {
-			// await Promise.all([Button.desrtoy(SurveyId), Product.destroy(SurveyId)]);
-			return this._SurveyModel.destroyAsync({ id: SurveyId });
-		} catch (err) {
-			sails.log.error(err);
-			return null;
-		}
+	remove(SurveyId) {
+		return this._SurveyModel.destroyAsync({ id: SurveyId });
 	}
 
 }
