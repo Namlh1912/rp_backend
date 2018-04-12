@@ -39,15 +39,6 @@ class ProductRepository {
 		return Product.update(index, data);
 	}
 
-	searchName(name) {
-		name = name.toLocaleLowerCase();
-		return this._ProductModel.queryAsync(`
-		set search_path = public, pg_catalog;
-		select products.name, products.id, products.img_link as imgLink
-		from products
-		where lower(name) like '%${name}%'
-		`).then(res => res.rows);
-	}
 }
 
 module.exports = ProductRepository;

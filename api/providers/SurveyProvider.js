@@ -31,48 +31,32 @@ class SurveyProvider {
 		return this.surveyRepo.getList();
 	}
 
-	async create(data) {
-		try {
-			const questionsData = data.questions;
-			let survey = await this.surveyRepo.create(data);
+	create(data) {
+		const questionsData = data.questions;
+		let survey;
+		return this.surveyRepo.create(data).then(newSurvey => {
+			survey = newSurvey;
 			let questionProm = [];
-			questionsData.forEach(async el => {
-				el.surveyId = survey.id;
+			questionsData.forEach(el => {
+				el.surveyId = newSurvey.id;
 				questionProm.push(this.questionRepo.create(el));
 			});
-			await Promise.all(questionProm);
-			return survey;
-		} catch(err) {
-			sails.log.error(err);
-		}
-
-		// await Promise.all(answerProm);
-
-			// .then(res => {
-			// 	return res;
-			// }).catch(err => {
-			// 	sails.log.error(err);
-			// 	return err;
-			// });
+			return Promise.all(questionProm);
+		}).then(() => survey)
+			.catch(err => sails.log.error(err));
 	}
 
-	async detail(id) {
-		try {
-			let [survey, questions] = await Promise.all([this.surveyRepo.getDetail(id), this.questionRepo.getBySurvey(id)]);
-			// let survey = await this.surveyRepo.getDetail(id);
-			// sails.log.info(survey);
-			// let questions = await this.questionRepo.getBySurvey(id);
-			// sails.log.info(questions);
-			questions.forEach(el => {
-				let answers = el.answer && el.answer.split('#@#');
-				el.answer = [];
-				answers && answers.forEach(ans => el.answer.push({title: ans}));
-			});
-			survey.questions = questions;
-			return survey;
-		} catch (err) {
-			sails.log.error(err);
-		}
+	detail(id) {
+		return Promise.all([this.surveyRepo.getDetail(id), this.questionRepo.getBySurvey(id)])
+			.then(([survey, questions]) => {
+				questions.forEach(el => {
+					let answers = el.answer && el.answer.split('#@#');
+					el.answer = [];
+					answers && answers.forEach(ans => el.answer.push({ title: ans }));
+				});
+				survey.questions = questions;
+				return survey;
+			}).catch(err => sails.log.error(err));
 	}
 
 	delete(id) {

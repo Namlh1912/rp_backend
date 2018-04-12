@@ -5,18 +5,12 @@ const moment = require('moment');
 const Bluebird = require('bluebird-global');
 
 const ProductProvider = require('../providers/ProductProvider');
-// const ThemeDetailProvider = require('../providers/ThemeDetailProvider');
-// const DeviceGroupsProvider = require('../providers/DeviceGroupsProvider');
 const FileUtil = require('../util/FileUtil');
 const ControllerBase = require('./ControllerBase');
 
-// const TMP_UPLOAD_PATH = path.join(process.cwd(), '.tmp', 'public', 'images', 'upload');
 const IMG_PATH = path.join(process.cwd(), 'assets', 'images', 'upload');
 const FILE_TYPES = ['.jpg', '.jpeg', '.png', '.gif'];
 const FILE_SIZE = 20120000; //maximum 20MB, type: byte
-// const TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
-// const SERVER_IMG = 'http://localhost:1337/images/upload/'
-// let this._rawFileName = '';
 
 class ProductController extends ControllerBase {
 
@@ -91,42 +85,44 @@ class ProductController extends ControllerBase {
 			});
 	}
 
-	async listByBrand(request, response) {
+	listByBrand(request, response) {
 		let brandId = parseInt(request.param('brand_id'));
 
-		let products = await this.productProvider.listByBrand(brandId);
-		if (products && products.length) { return response.ok(products); }
-		return response.notFound('Cannot find any products');
+		this.productProvider.listByBrand(brandId).then(products => {
+			if (products && products.length) { return response.ok(products); }
+			return response.notFound('Cannot find any products');
+		}).catch(err => {
+			sails.log.error(err);
+			return response.serverError(err);
+		});
 	}
 
-	async update(request, response) {
-		try {
-			let check = await this.productProvider.detail(request.body['id']);
+	update(request, response) {
+		this.productProvider.detail(request.body['id']).then(check => {
 			if (check) {
-				let product = await this.productProvider.update(request.body);
-				return response.ok(product);
+				return this.productProvider.update(request.body);
 			}
 			return response.notFound('Cannot find this product');
-		}
-		catch (err) {
+		}).then(product => {
+			if (product.id) { return response.ok(product); }
+		}).catch(err => {
 			sails.log.error(err);
 			return response.serverError('Cannot update this product');
-		}
+		});
 	}
 
 
-	async searchName(request, response) {
-		try {
-			let name = request.param('name');
-			let products = await this.productProvider.searchName(name);
+	searchName(request, response) {
+		let name = request.param('name');
+		this.productProvider.searchName(name).then(products => {
 			if (products && products.length) {
 				return response.ok(products);
 			}
-			return response.notFound('Cannot find any matches');
-		} catch (ex) {
-			sails.log.error(ex);
+			return response.notFound('Cannot find any matches')
+		}).catch(err => {
+			sails.log.error(err);
 			return response.serverError('Cannot find any matches');
-		}
+		});
 	}
 
 	//#region upload file

@@ -50,16 +50,16 @@ class CategoryController extends ControllerBase {
 		});
 	}
 
-	async detail(request, response) {
+	detail(request, response) {
 		let id = parseInt(request.param('id'), 10);
-		try {
-			const [detail, products] = await Promise.all([this.categoryProvider.detail(id), this.productProvider.getByCategory(id)]);
+		Promise.all([this.categoryProvider.detail(id), this.productProvider.getByCategory(id)])
+		.then(([detail, products]) => {
 			detail.products = products;
-			response.ok(detail);
-		} catch(err) {
-			response.serverError(`Get category id ${id} failed`);
+			return response.ok(detail);
+		}).catch(err => {
 			sails.log.error(err);
-		}
+			return response.serverError(`Get category id ${id} failed`);
+		});
 	}
 
 	getNow() {

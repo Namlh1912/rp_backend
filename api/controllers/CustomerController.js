@@ -8,7 +8,7 @@ class CustomerController extends ControllerBase {
 	constructor() {
 		super();
 		this._exportedMethods = [
-			
+
 		]
 	}
 
@@ -37,39 +37,52 @@ class CustomerController extends ControllerBase {
 			this.themeDetailProvider.getByThemeId(id),
 			this.groupProvider.getGroupByTheme(id)
 		])
-		.then(([detail, assets, groups]) => {
-			detail.assets = assets;
-			detail.groups = groups;
-			response.ok({ data: detail });
-		})
-		.catch(err => {
-			response.serverError(`Get theme id ${id} failed`);
-			sails.log.error(err);
-		});
+			.then(([detail, assets, groups]) => {
+				detail.assets = assets;
+				detail.groups = groups;
+				response.ok({ data: detail });
+			})
+			.catch(err => {
+				response.serverError(`Get theme id ${id} failed`);
+				sails.log.error(err);
+			});
 	}
 
-	async delete(request, response) {
+	delete(request, response) {
 		let id = parseInt(request.param('id'));
-		const deleted = await this._provider.delete(id);
-		return response.ok({data: true});
-	}	
+		this._provider.delete(id)
+			.then(deleted => response.ok(deleted))
+			.catch(err => {
+				sails.log.error(err);
+				return response.serverError(err);
+			});
+	}
 
-	getNow(){
+	getNow() {
 		return moment().utc();
 	}
 
-	async list(request, response) {
-		let list = await this.customerProvider.list();
-		if(list && list.length) {
-			return response.ok({data: list});
-		}
-		return response.serverError('Get themes list failed');
+	list(request, response) {
+		this.customerProvider.list().then(list => {
+			if (list && list.length) {
+				return response.ok({ data: list });
+			}
+			response.status(400);
+			return response.send();
+		}).catch(err => {
+			sails.log.error(err);
+			return response.serverError('Get customer list failed');
+		});
 	}
 
-	async update(request, response) {
+	update(request, response) {
 		let customer = request.body;
-		let updated = await this._provider.update(customer);
-		return response.ok({data: updated});
+		this._provider.update(customer).then(updated => {
+			return response.ok(updated);
+		}).catch(err => {
+			sails.log.error(err);
+			return response.serverError('Cannot update Customer');
+		});
 	}
 }
 

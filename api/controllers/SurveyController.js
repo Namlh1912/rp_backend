@@ -27,34 +27,27 @@ class SurveyController extends ControllerBase {
 		return this._productProvider;
 	}
 
-	async create(request, response) {
-		try {
-			let surveyData = request.body;
-			const survey = await this.surveyProvider.create(surveyData);
-			return response.ok(survey);
-		} catch (err) {
-			sails.log.error(err);
-			return response.serverError('Create Failed!');
-		}
-		// .then(res => response.ok(res))
-		// .catch(err => {
-		// 	sails.log.error(err);
-		// 	response.serverError('Cannot create this brand');
-		// });
+	create(request, response) {
+		let surveyData = request.body;
+		this.surveyProvider.create(surveyData)
+			.then(survey => response.ok(survey))
+			.catch(err => {
+				sails.log.error(err);
+				return response.serverError('Create Failed!');
+			});
 	}
 
-	async detail(request, response) {
+	detail(request, response) {
 		let id = parseInt(request.param('id'), 10);
-		try {
-			const detail = await this.surveyProvider.detail(id)
+		this.surveyProvider.detail(id).then(detail => {
 			if (detail) {
 				return response.ok(detail)
 			}
 			return response.notFound();
-		} catch (err) {
+		}).catch(err => {
 			response.serverError(`Get survey id ${id} failed`);
 			sails.log.error(err);
-		}
+		});
 	}
 
 	delete(request, response) {
@@ -89,28 +82,13 @@ class SurveyController extends ControllerBase {
 		return moment().utc();
 	}
 
-	async list(request, response) {
-		try {
-			let list = await this.surveyProvider.list();
+	list(request, response) {
+		this.surveyProvider.list().then(list => {
 			return response.ok(list);
-		} catch (err) {
+		}).catch(err => {
 			sails.log.error(err);
 			return response.serverError('Get brands list failed');
-		}
-		// if (list && list.length) {
-		// 	let brandProm = [];
-		// 	list.forEach(brand => {
-		// 		brand.products = [];
-		// 		brandProm.push(this.productProvider.getByCategory(brand.id));
-		// 	});
-		// 	let brandProducts = await Promise.all(brandProm);
-		// 	brandProducts.forEach(products => {
-		// 		if(products.length) {
-		// 			let index = list.findIndex(el => el.id == products[0].brandId);
-		// 			list[index].products = products;
-		// 		}
-		// 	});
-		// }
+		});
 	}
 
 	searchByName(request, response) {
