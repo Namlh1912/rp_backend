@@ -1,8 +1,9 @@
 const moment = require('moment');
 
 const SurveyProvider = require('../providers/SurveyProvider');
-const ProductProvider = require('../providers/ProductProvider');
+// const ProductProvider = require('../providers/ProductProvider');
 const ControllerBase = require('./ControllerBase');
+const Validator = require('../validator/validation');
 
 class SurveyController extends ControllerBase {
 
@@ -20,15 +21,24 @@ class SurveyController extends ControllerBase {
 		return this._provider;
 	}
 
-	get productProvider() {
-		if (!this._productProvider) {
-			this._productProvider = new ProductProvider();
+	// get productProvider() {
+	// 	if (!this._productProvider) {
+	// 		this._productProvider = new ProductProvider();
+	// 	}
+	// 	return this._productProvider;
+	// }
+
+	get validator() {
+		if (!this._validator) {
+			this._validator = new Validator();
 		}
-		return this._productProvider;
+		return this._validator;
 	}
 
 	create(request, response) {
 		let surveyData = request.body;
+		let validateRes = this.validator.notEmpty(surveyData);
+		if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
 		this.surveyProvider.create(surveyData)
 			.then(survey => response.ok(survey))
 			.catch(err => {

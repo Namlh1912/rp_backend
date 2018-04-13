@@ -68,7 +68,7 @@ module.exports.routes = {
 	'patch /users': 'User.update',
 	'delete /users/:id': 'User.delete',
 
-	/************* BRANDS ***************/
+	/************* SURVEYS ***************/
 	'post /surveys': 'Survey.create',
 	'get /surveys/:id': 'Survey.detail',
 	'get /surveys': 'Survey.list',
@@ -76,6 +76,8 @@ module.exports.routes = {
 	'patch /surveys': 'Survey.update',
 	'delete /surveys/:id': 'Survey.delete',
 
+	/************* BRANDS ***************/
+	'post /surveys-detail': 'SurveyDetail.create'
 
 	/***************************************************************************
 	*                                                                          *

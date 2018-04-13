@@ -4,6 +4,7 @@ const ProductProvider = require('../providers/ProductProvider');
 const CustomerProvider = require('../providers/CustomerProvider');
 const RateProvider = require('../providers/RateProvider');
 const ControllerBase = require('./ControllerBase');
+const Validator = require('../validator/validation');
 
 // const SERVER = 'http://localhost:1337';
 
@@ -34,9 +35,24 @@ class OrderController extends ControllerBase {
 		return this._customerProvider
 	}
 
+	get validator() {
+		if (!this._validator) {
+			this._validator = new Validator();
+		}
+		return this._validator;
+	}
+
 	create(request, response) {
 		const customer = request.body['customer'];
+		// if (!customer) { return response.badRequest(`Missing field customer`); }
+		let validateRes = this.validator.notEmpty(customer);
+		if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
+
 		const rates = request.body['rates'];
+		// if (!rates) { return response.badRequest(`Missing field rate`); }
+		validateRes = this.validator.notEmpty(rates);
+		if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
+
 		this.customerProvider.create(customer).then(cus => {
 			let rateProm = [];
 			rates.forEach(el => {
@@ -53,7 +69,7 @@ class OrderController extends ControllerBase {
 		});
 	}
 
-	delete(request, response) {}
+	delete(request, response) { }
 
 	detail(request, response) {
 		// try {

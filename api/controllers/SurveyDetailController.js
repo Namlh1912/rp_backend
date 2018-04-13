@@ -1,7 +1,10 @@
 const moment = require('moment');
 
 const SurveyDetailProvider = require('../providers/SurveyDetailProvider');
+
+const CustomerProvider = require('../providers/CustomerProvider');
 const ControllerBase = require('./ControllerBase');
+const Validator = require('../validator/validation');
 
 class SurveyController extends ControllerBase {
 
@@ -19,19 +22,36 @@ class SurveyController extends ControllerBase {
 		return this._provider;
 	}
 
-	create(request, response) {
-		let surveyData = request.body;
-		let answer = '';
-		let surveyDetailProm = [];
-		surveyData.forEach(sur => {
-			sur.answers.forEach(ans => {
-				answer += ans + ', ';
-			});
-			sur.answer = answer;
-			surveyDetailProm.push(this.surveyDetailProvider.create(sur));
-		});
+	get customerProvider() {
+		if (!this._provider) {
+			this._provider = new CustomerProvider();
+		}
+		return this._provider;
+	}
 
-		Promise.all(surveyDetailProm).then(() => {
+	get validator() {
+		if (!this._validator) {
+			this._validator = new Validator();
+		}
+		return this._validator;
+	}
+
+	create(request, response) {
+		let surveyData = request.body['survey'];
+		let validateRes = this.validator.notEmpty(surveyData);
+		if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
+
+		const customer = request.body['customer'];
+		validateRes = this.validator.notEmpty(customer);
+		if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
+		let surveyDetailProm = [];
+		this.customerProvider.create(customer).then(cus => {
+			surveyData.forEach(sur => {
+				sur.customerId = cus.id;
+				surveyDetailProm.push(this.surveyDetailProvider.create(sur));
+			});
+			return Promise.all(surveyDetailProm);
+		}).then(() => {
 			response.status(204);
 			return response.send();
 		}).catch(err => {
