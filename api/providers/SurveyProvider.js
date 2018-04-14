@@ -35,6 +35,9 @@ class SurveyProvider {
 		const questionsData = data.questions;
 		let survey;
 		return this.surveyRepo.create(data).then(newSurvey => {
+			if(!data) {
+				return null;
+			}
 			survey = newSurvey;
 			let questionProm = [];
 			questionsData.forEach(el => {
