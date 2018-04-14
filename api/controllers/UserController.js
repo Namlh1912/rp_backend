@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const UserProvider = require('../providers/UserProvider');
 const ControllerBase = require('./ControllerBase');
+const Validator = require('../validator/validation');
 
 const SECRET = '123456abc';
 const ISSUER = 'http://localhost:1337';
@@ -24,8 +25,18 @@ class UserController extends ControllerBase {
 		return this._provider;
 	}
 
+	get validator() {
+		if (!this._validator) {
+			this._validator = new Validator();
+		}
+		return this._validator;
+	}
+
 	create(request, response) {
 		let body = request.body;
+		let validateRes = this.validator.notEmpty(body);
+		if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
+
 		this.userProvider.checkUsername(body.username).then(check => {
 			if (check) {
 				return response.forbidden('This username is being used!');
@@ -74,6 +85,8 @@ class UserController extends ControllerBase {
 
 	update(request, response) {
 		let user = request.body;
+		let validateRes = this.validator.notEmpty(user);
+		if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
 		this.userProvider.update(user).then(res => {
 			response.ok(res);
 		}).catch(err => {

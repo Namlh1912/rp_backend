@@ -5,10 +5,22 @@ module.exports = {
 			type: 'integer',
 			primaryKey: true
 		},
-		description: 'string',
-		questionType: 'integer',
-		surveyId: 'integer',
-		answer: 'string'
+		description: {
+			type: 'string',
+			required: true
+		},
+		questionType: {
+			type: 'integer',
+			required: true
+		},
+		surveyId: {
+			type: 'integer',
+			required: true
+		},
+		answer: {
+			type: 'string',
+			required: true
+		}
 	},
 	autoCreatedAt: false,
 	autoUpdatedAt: false,

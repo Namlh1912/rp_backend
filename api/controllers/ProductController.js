@@ -7,6 +7,7 @@ const Bluebird = require('bluebird-global');
 const ProductProvider = require('../providers/ProductProvider');
 const FileUtil = require('../util/FileUtil');
 const ControllerBase = require('./ControllerBase');
+const Validator = require('../validator/validation');
 
 const IMG_PATH = path.join(process.cwd(), 'assets', 'images', 'upload');
 const FILE_TYPES = ['.jpg', '.jpeg', '.png', '.gif'];
@@ -30,20 +31,30 @@ class ProductController extends ControllerBase {
 		return this._provider;
 	}
 
+	get validator() {
+		if (!this._validator) {
+			this._validator = new Validator();
+		}
+		return this._validator;
+	}
+
 	getNow() {
 		return moment().utc();
 	}
 
 	create(request, response) {
+		const body = request.body;
+		const validateRes = this.validator.notEmpty(body);
+		if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
 		this.uploadFile(request, IMG_PATH)
 			.then(file => {
-				let product = Object.assign({}, request.body, { imgLink: path.basename(file.fd) });
+				let product = Object.assign({}, body, { imgLink: path.basename(file.fd) });
 				return this.productProvider.create(product);
 			})
 			.then(product => response.ok(product))
 			.catch(err => {
 				sails.log.error(err);
-				response.serverError('Upload failed at uploading images!');
+				response.serverError(err.message);
 			});
 	}
 
@@ -98,8 +109,11 @@ class ProductController extends ControllerBase {
 	}
 
 	update(request, response) {
+
 		this.productProvider.detail(request.body['id']).then(check => {
 			if (check) {
+				const validateRes = this.validator.notEmpty(request.body);
+				if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
 				return this.productProvider.update(request.body);
 			}
 			return response.notFound('Cannot find this product');
@@ -135,9 +149,10 @@ class ProductController extends ControllerBase {
 				saveAs: this.saveAs.bind(this)
 			});
 		}).then(([file]) => {
+			if (!file) { return Promise.reject(new Error('File is not accepted')); }
 			const rejectFn = (msg) => {
 				return this._fileUtil.removeFile(file.fd)
-					.then(() => Promise.reject(new Error(msg)));
+				.then(() => Promise.reject(new Error(msg)));
 			};
 			let dataType = path.extname(file.filename);
 

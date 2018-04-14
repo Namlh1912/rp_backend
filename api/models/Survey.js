@@ -12,7 +12,10 @@ module.exports = {
 			type: 'integer',
 			primaryKey: true
 		},
-		title: 'string',
+		title: {
+			type: 'string',
+			required: true
+		},
 	},
 	autoCreatedAt: false,
 	autoUpdatedAt: false,

@@ -2,6 +2,7 @@ const moment = require('moment');
 
 const CustomerProvider = require('../providers/CustomerProvider');
 const ControllerBase = require('./ControllerBase');
+const Validator = require('../validator/validation');
 
 class CustomerController extends ControllerBase {
 
@@ -19,8 +20,17 @@ class CustomerController extends ControllerBase {
 		return this._provider;
 	}
 
+	get validator() {
+		if (!this._validator) {
+			this._validator = new Validator();
+		}
+		return this._validator;
+	}
+
 	create(request, response) {
 		let body = request.body;
+		const validateRes = this.validator.notEmpty(body);
+		if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
 		this.customerProvider.create(body)
 			.then(res => response.ok({ data: res }))
 			.catch(err => {
@@ -77,11 +87,16 @@ class CustomerController extends ControllerBase {
 
 	update(request, response) {
 		let customer = request.body;
+		const validateRes = this.validator.notEmpty(customer);
+		if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`); }
 		this._provider.update(customer).then(updated => {
-			return response.ok(updated);
+			if(updated) {
+				return response.ok(updated);
+			}
+			return response.serverError('Cannot update Customer');
 		}).catch(err => {
 			sails.log.error(err);
-			return response.serverError('Cannot update Customer');
+			return response.serverError(err.message);
 		});
 	}
 }

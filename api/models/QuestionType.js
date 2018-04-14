@@ -5,7 +5,10 @@ module.exports = {
 			type: 'integer',
 			primaryKey: true
 		},
-		name: 'string'
+		name: {
+			type: 'string',
+			required: true
+		}
 	},
 	autoCreatedAt: false,
 	autoUpdatedAt: false

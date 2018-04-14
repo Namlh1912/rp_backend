@@ -5,12 +5,30 @@ module.exports = {
 			type: 'integer',
 			primaryKey: true
 		},
-		name: 'string',
-		email: 'string',
-		phone: 'string',
-		city: 'string',
-		company: 'string',
-		business: 'string',
+		name: {
+			type: 'string',
+			required: true
+		},
+		email: {
+			type: 'string',
+			required: true
+		},
+		phone: {
+			type: 'string',
+			required: true
+		},
+		city: {
+			type: 'string',
+			required: true
+		},
+		company: {
+			type: 'string',
+			required: true
+		},
+		business: {
+			type: 'string',
+			required: true
+		},
 	},
 	autoCreatedAt: false,
 	autoUpdatedAt: false,

@@ -4,6 +4,7 @@ const moment = require('moment');
 const CategoryProvider = require('../providers/CategoryProvider');
 const ProductProvider = require('../providers/ProductProvider');
 const ControllerBase = require('./ControllerBase');
+const Validator = require('../validator/validation');
 
 class CategoryController extends ControllerBase {
 
@@ -28,8 +29,17 @@ class CategoryController extends ControllerBase {
 		return this._productProvider;
 	}
 
+	get validator() {
+		if (!this._validator) {
+			this._validator = new Validator();
+		}
+		return this._validator;
+	}
+
 	create(request, response) {
 		const category = request.body;
+		const validateRes = this.validator.notEmpty(category);
+		if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
 		this.categoryProvider.create(category)
 			.then(res => {
 				return response.ok(res);
@@ -53,13 +63,13 @@ class CategoryController extends ControllerBase {
 	detail(request, response) {
 		let id = parseInt(request.param('id'), 10);
 		Promise.all([this.categoryProvider.detail(id), this.productProvider.getByCategory(id)])
-		.then(([detail, products]) => {
-			detail.products = products;
-			return response.ok(detail);
-		}).catch(err => {
-			sails.log.error(err);
-			return response.serverError(`Get category id ${id} failed`);
-		});
+			.then(([detail, products]) => {
+				detail.products = products;
+				return response.ok(detail);
+			}).catch(err => {
+				sails.log.error(err);
+				return response.serverError(`Get category id ${id} failed`);
+			});
 	}
 
 	getNow() {
@@ -77,14 +87,16 @@ class CategoryController extends ControllerBase {
 
 	update(request, response) {
 		let body = request.body;
+		const validateRes = this.validator.notEmpty(body);
+		if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
 		this.categoryProvider.update(body).then(res => {
 			if (res) {
 				return response.ok(res);
 			}
-			return response.notFound('Cannot find this button');
+			return response.notFound('Cannot find this category');
 		}).catch(err => {
-			response.serverError(`Update devices failed`);
 			sails.log.error(err);
+			return response.serverError(`Update Category failed`);
 		});
 	}
 }

@@ -510,7 +510,7 @@ Get user detail
 		}
 
 
-### Login [GET /login]
+### Login [POST /login]
 
 + Request (application/json)
 
@@ -556,4 +556,46 @@ Get user detail
 
 		{
 			"message": "Update failed"
+		}
+
+## Survey Detail
+
+### Create [POST /surveys-detail]
+
++ Request (application/json)
+
+		{
+			"customer": {
+				"name": "KhoiNK",
+				"email":"Khoi@Khoi",
+				"phone":"123456789",
+				"city":"HCMC",
+				"company":"First Interactive",
+				"business":"Dev"
+			},
+			"survey": [
+				{
+					"questionId": 28,
+					"surveyId": 10,
+					"answer": "Ngon vl"
+				},
+				{
+					"questionId": 29,
+					"answer": "đéo",
+					"surveyId": 10
+				}, 
+				{
+					"questionId": 30,
+					"answer": "Ừ",
+					"surveyId": 10
+				}
+			]
+		}
+
++ Response 204 (application/json)
+
++ Response 500 (application/json)
+
+		{
+			"message": "Create failed"
 		}

@@ -1,8 +1,9 @@
 const moment = require('moment');
 
 const SurveyProvider = require('../providers/SurveyProvider');
-const ProductProvider = require('../providers/ProductProvider');
+// const ProductProvider = require('../providers/ProductProvider');
 const ControllerBase = require('./ControllerBase');
+const Validator = require('../validator/validation');
 
 class SurveyController extends ControllerBase {
 
@@ -20,15 +21,24 @@ class SurveyController extends ControllerBase {
 		return this._provider;
 	}
 
-	get productProvider() {
-		if (!this._productProvider) {
-			this._productProvider = new ProductProvider();
+	// get productProvider() {
+	// 	if (!this._productProvider) {
+	// 		this._productProvider = new ProductProvider();
+	// 	}
+	// 	return this._productProvider;
+	// }
+
+	get validator() {
+		if (!this._validator) {
+			this._validator = new Validator();
 		}
-		return this._productProvider;
+		return this._validator;
 	}
 
 	create(request, response) {
 		let surveyData = request.body;
+		let validateRes = this.validator.notEmpty(surveyData);
+		if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
 		this.surveyProvider.create(surveyData)
 			.then(survey => response.ok(survey))
 			.catch(err => {
@@ -51,31 +61,31 @@ class SurveyController extends ControllerBase {
 	}
 
 	delete(request, response) {
-		let id = parseInt(request.param('id'));
+		// let id = parseInt(request.param('id'));
 
-		this.groupProvider.getGroupByTheme(id)
-			.then(groups => {
-				if (groups.length) {
-					return {
-						message: 'The following theme are used by other groups',
-						themes: groups
-					};
-				}
-				return this.surveyProvider.delete(id);
-			})
-			.then(deleted => {
-				if (Array.isArray(deleted)) {
-					response.ok({
-						data: deleted
-					});
-				} else {
-					response.forbidden(deleted);
-				}
-			})
-			.catch(err => {
-				sails.log.error(err);
-				return response.serverError('Cannot remove this theme');
-			});
+		// this.groupProvider.getGroupByTheme(id)
+		// 	.then(groups => {
+		// 		if (groups.length) {
+		// 			return {
+		// 				message: 'The following theme are used by other groups',
+		// 				themes: groups
+		// 			};
+		// 		}
+		// 		return this.surveyProvider.delete(id);
+		// 	})
+		// 	.then(deleted => {
+		// 		if (Array.isArray(deleted)) {
+		// 			response.ok({
+		// 				data: deleted
+		// 			});
+		// 		} else {
+		// 			response.forbidden(deleted);
+		// 		}
+		// 	})
+		// 	.catch(err => {
+		// 		sails.log.error(err);
+		// 		return response.serverError('Cannot remove this theme');
+		// 	});
 	}
 
 	getNow() {
@@ -87,7 +97,7 @@ class SurveyController extends ControllerBase {
 			return response.ok(list);
 		}).catch(err => {
 			sails.log.error(err);
-			return response.serverError('Get brands list failed');
+			return response.serverError('Get surveys list failed');
 		});
 	}
 
@@ -113,36 +123,16 @@ class SurveyController extends ControllerBase {
 
 
 	update(request, response) {
-		// let body = request.body;
-		// let assets = body['assets'];
-		// let groups = body['groups'];
-		// let detailAssets = [],
-		// 	detailGroups = [];
-
-		// body.theme['updatedAt'] = moment().format(TIME_FORMAT);
-		// let theme = body.theme;
-
-		// if (assets && assets.length || groups && groups.length) {
-		// 	assets.forEach(el => {
-		// 		el.theme_id = body.theme['id'];
-		// 		detailAssets.push(this.themeDetailProvider.checkExistDetail(el));
-		// 	});
-
-		// 	groups.forEach(group => {
-		// 		group.theme_id = body.theme['id'];
-		// 		detailGroups.push(this.groupProvider.updateThemeId(group.groupId, group.theme_id));
-		// 	});
-
-		// 	Promise.all(detailAssets).then(() => {
-		// 		this.updateTheme(theme, response);
-		// 	}).catch(err => {
-		// 		sails.log.error(err);
-		// 		response.serverError('Update theme failed');
-		// 	});
-		// } else {
-		// 	this.updateTheme(theme, response);
-		// }
-
+		const survey = response.body;
+		let validateRes = this.validator.notEmpty(survey);
+		if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
+		this.surveyProvider.update(survey).then(() => {
+			response.status(204);
+			return response.send();
+		}).catch(err => {
+			sails.log.error(err);
+			return response.serverError(err.message);
+		});
 	}
 }
 
