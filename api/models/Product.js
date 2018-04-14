@@ -27,7 +27,8 @@ module.exports = {
 		categoryId: {
 			type: 'integer',
 			required: true
-		}
+		},
+		status: 'boolean'
 	},
 	autoCreatedAt: false,
 	autoUpdatedAt: false,

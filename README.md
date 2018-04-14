@@ -9,6 +9,24 @@
 # Products
 - serveraddress/images/upload/[thumbnail-]imgLink
 
+## DELETE API
+- For every API
+
++ Request (application/json)
+
+		{
+			"id": 7,
+			"status": false | 0
+		}
+
++ Response 204 (application/json)
+
++ Response 500 (application/json)
+
+		{
+			"message":"Update 'model' failed"
+		}
+
 ## PRODUCTS 
 
 ### List All PRODUCTS [GET /products]
@@ -202,8 +220,36 @@ Load all brands.
 + Request (application/json)
 
 		{
-			"id": 4,
-			"name": "pepsi"
+			"id": 1,
+			"title": "food",
+			"questions": [
+				{
+					"id": 1,
+					"description": "Ngon không?",
+					"questionType": "3",
+					"answer": "Ngon vl#@#đéo#@#dở vl",
+					"status": false
+				},
+				{
+					"id": 2,
+					"description": "Mày có đẹp trai không?",
+					"questionType": "1",
+					"status": true
+				}, 
+				{
+					"id": 3,
+					"description": "Mày xấu vl?",
+					"questionType": "2",
+					"answer": "Đúng#@#Ừ",
+					"status": true
+				}, 
+				{
+					"description": "Mày xấu vl?",
+					"questionType": "2",
+					"answer": "Đúng#@#Ừ",
+					"status": true
+				}
+			]
 		}
 
 + Response 204 (application/json)
@@ -243,7 +289,7 @@ Load all brands.
 + Response 500 (application/json)
 
 		{
-			"message": "Cannot create this brand"
+			"message": "Cannot create this Survey"
 		}
 
 
@@ -262,141 +308,62 @@ Load all brands.
 + Response 200 (application/json)
 
 		{
-			"id": 10,
+			"id": 16,
 			"title": "food",
 			"questions": [
 				{
-					"id": 28,
+					"id": 45,
 					"description": "Ngon không?",
-					"questionType": 3,
-					"surveyId": 10,
+					"questionType": "3",
+					"surveyId": 16,
 					"answer": [
-						{
-							"title": "Ngon vl"
-						},
-						{
-							"title": "đéo"
-						},
-						{
-							"title": "dở vl"
-						}
-					],
-					"type": "Single"
+						"Ngon vl",
+						"đéo",
+						"dở vl"
+					]
 				},
 				{
-					"id": 29,
+					"id": 46,
 					"description": "Mày có đẹp trai không?",
-					"questionType": 1,
-					"surveyId": 10,
-					"answer": [],
-					"type": "Text"
+					"questionType": "1",
+					"surveyId": 16,
+					"answer": []
 				},
 				{
-					"id": 30,
+					"id": 47,
 					"description": "Mày xấu vl?",
-					"questionType": 2,
-					"surveyId": 10,
+					"questionType": "2",
+					"surveyId": 16,
 					"answer": [
-						{
-							"title": "Đúng"
-						},
-						{
-							"title": "Ừ"
-						}
-					],
-					"type": "Multiple"
+						"Đúng",
+						"Ừ"
+					]
 				}
 			]
 		}
 
 ## Rates
 
-### List All Rates [GET /orders/:column/asc || desc]
+### List All Rates [GET /rates]
 - param column must match with database
 
-+ Response 200 (application/json)
++ Response 200 (text/html)
 
-		[
-			{
-				"id": 48,
-				"userId": 1,
-				"createdAt": "2018-03-15T03:36:44.000Z",
-				"status": "processing",
-				"username": "admin",
-				"address": "Ha Noi",
-				"productOrders": [
-					{
-						"product": {
-							"name": "coca 350ml",
-							"price": 10000,
-							"productId": 2,
-							"imgLink": "ry_T0dDYz.jpg"
-						},
-						"quantity": 3
-					},
-					{
-						"product": {
-							"name": "coca 500ml",
-							"price": 10000,
-							"productId": 3,
-							"imgLink": "rkldaCuPKf.jpg"
-						},
-						"quantity": 3
-					},
-					{
-						"product": {
-							"name": "cherry",
-							"price": 10000,
-							"productId": 10,
-							"imgLink": "SJxbP5PKz.jpg"
-						},
-						"quantity": 3
-					}
-				]
-			},
-			{
-				"id": 49,
-				"userId": 71,
-				"createdAt": "2018-03-16T06:35:08.000Z",
-				"status": "processing",
-				"username": "admin",
-				"address": "Ha Noi",
-				"productOrders": [
-					{
-						"product": {
-							"name": "coca 350ml",
-							"price": 10000,
-							"productId": 2,
-							"imgLink": "ry_T0dDYz.jpg"
-						},
-						"quantity": 3
-					},
-					{
-						"product": {
-							"name": "coca 500ml",
-							"price": 10000,
-							"productId": 3,
-							"imgLink": "rkldaCuPKf.jpg"
-						},
-						"quantity": 3
-					},
-					{
-						"product": {
-							"name": "cherry",
-							"price": 10000,
-							"productId": 10,
-							"imgLink": "SJxbP5PKz.jpg"
-						},
-						"quantity": 3
-					}
-				]
-			},
-		]
+		"customer","product","rate","feedback"
+		"KhoiNk","dsadasdas",,"Ngon vl"
+		"KhoiNk","dsadasdas",,"như cức"
+		"KhoiNk","dsadasdas",,"de de"
+		"NamLH","dsadasdas",3,"Ngon vl"
+		"NamLH","dsadasdas",4,"như cức"
+		"NamLH","dsadasdas",1,"de de"
+		"NamLH","dsadasdas",3,"Ngon vl"
+		"NamLH","dsadasdas",4,"như cức"
+		"NamLH","dsadasdas",1,"de de"
 
 + Reponse 500 (application/json) 
 
 		{
-			"message": "Get orders list failed"
+			"message": "Get rates list failed"
 		}
 
 ### Create Rate [POST /rates]
@@ -599,3 +566,16 @@ Get user detail
 		{
 			"message": "Create failed"
 		}
+
+### List [GET /surveys-detail]
+
+
++ Response 200 (text/html)
+
+		"name","Ngon không?","Mày có đẹp trai không?","Mày xấu vl?"
+		"KhoiNK","Ngon vl","",""
+		"KhoiNK","Ngon vl","",""
+		"KhoiNK","","đéo",""
+		"KhoiNK","","đéo",""
+		"KhoiNK","","","Ừ"
+		"KhoiNK","","","Ừ"

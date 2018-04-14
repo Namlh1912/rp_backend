@@ -50,19 +50,30 @@ class SurveyController extends ControllerBase {
 		validateRes = this.validator.notEmpty(customer);
 		if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
 		let surveyDetailProm = [];
-		this.customerProvider.create(customer).then(cus => {
-			surveyData.forEach(sur => {
-				sur.customerId = cus.id;
-				surveyDetailProm.push(this.surveyDetailProvider.create(sur));
-			});
-			return Promise.all(surveyDetailProm);
-		}).then(() => {
+		surveyData.questions.forEach(sur => {
+			sur.survey = surveyData.title;
+			surveyDetailProm.push(this.surveyDetailProvider.create(sur));
+		});
+		Promise.all([
+			this.customerProvider.create(customer),
+			Promise.all(surveyDetailProm)
+		]).then(() => {
 			response.status(204);
 			return response.send();
 		}).catch(err => {
 			sails.log.error(err);
 			return response.serverError('Create Failed!');
 		});
+		// this.customerProvider.create(customer).then(cus => {
+
+		// 	return Promise.all(surveyDetailProm);
+		// }).then(() => {
+		// 	response.status(204);
+		// 	return response.send();
+		// }).catch(err => {
+		// 	sails.log.error(err);
+		// 	return response.serverError('Create Failed!');
+		// });
 	}
 
 	getNow() {
@@ -72,9 +83,9 @@ class SurveyController extends ControllerBase {
 	async list(request, response) {
 		try {
 			let list = await this.surveyDetailProvider.list();
-
-			const json2csvParser = new json2csv({ fields: list.headers });
-			let csv = json2csvParser.parse(list.data);
+			const fields = ['customer', 'survey', 'question', 'answer'];
+			const json2csvParser = new json2csv({ fields });
+			let csv = json2csvParser.parse(list);
 
 			return response.ok(csv);
 		} catch (err) {

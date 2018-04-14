@@ -11,11 +11,11 @@ class CustomerRepository {
 	}
 
 	getList() {
-		return Customer.find();
+		return Customer.find({status: 1});
 	}
 
 	getDetail(id) {
-		return Customer.findOne({ id: id });
+		return Customer.findOne({ id: id, status: 1 });
 	}
 
 	update(data) {

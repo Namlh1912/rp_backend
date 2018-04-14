@@ -11,17 +11,25 @@ class QuestionRepository {
 	}
 
 	getList() {
-		return Question.find();
+		return Question.find({ where: { status: 1 } });
 	}
 
 	getDetail(id) {
 		return Question.findOne({
-			id
+			id,
+			status: 1
 		});
 	}
 
+	findOrCreate(data) {
+		return Question.findOrCreate({
+			id: data.id,
+			status: 1
+		}, data);
+	}
+
 	getBySurvey(id) {
-		return Question.find({surveyId: id})
+		return Question.find({ surveyId: id, status: 1 })
 			.then(res => res)
 			.catch(err => sails.log.error(err));
 	}

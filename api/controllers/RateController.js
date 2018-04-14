@@ -1,4 +1,5 @@
-const moment = require("moment")
+const moment = require("moment");
+const json2csv = require('json2csv').Parser;
 
 const ProductProvider = require('../providers/ProductProvider');
 const CustomerProvider = require('../providers/CustomerProvider');
@@ -12,13 +13,6 @@ class OrderController extends ControllerBase {
 	constructor() {
 		super()
 		this._exportedMethods = []
-	}
-
-	get productProvider() {
-		if (!this._productProvider) {
-			this._productProvider = new ProductProvider()
-		}
-		return this._productProvider
 	}
 
 	get rateProvider() {
@@ -100,39 +94,18 @@ class OrderController extends ControllerBase {
 		return moment().utc()
 	}
 
-	list(request, response) {
-		// let column = request.param('column');
-		// let method = request.param('method');
-		// let orders = [];
-		// this.orderProvider.list(column, method)
-		// 	.then(res => {
-		// 		let orderProm = [];
-		// 		orders = res;
-		// 		res.forEach(order => {
-		// 			order.productOrders = [];
-		// 			orderProm.push(this.orderDetailProvider.getByOrderId(order.id));
-		// 		});
-		// 		return Promise.all(orderProm);
-		// 	})
-		// 	.then(products => {
-		// 		products.forEach(productArr => {
-		// 			let [product] = productArr;
-		// 			let index = product && orders.findIndex(el => el.id === product.orderId);
-		// 			if (index >= 0) {
-		// 				productArr.forEach(el => {
-		// 					delete el.orderId;
-		// 					let quantity = el.quantity;
-		// 					delete el.quantity;
-		// 					orders[index].productOrders.push({ product: el, quantity })
-		// 				});
-		// 			}
-		// 		});
-		// 		return response.ok(orders);
-		// 	})
-		// 	.catch(err => {
-		// 		response.serverError('Get groups failed');
-		// 		sails.log.error(err);
-		// 	});
+	async list(request, response) {
+		try {
+			let list = await this.rateProvider.list();
+			const fields = ['customer', 'product', 'rate', 'feedback'];
+			const json2csvParser = new json2csv({ fields });
+			let csv = json2csvParser.parse(list);
+
+			return response.ok(csv);
+		} catch (err) {
+			sails.log.error(err);
+			return response.serverError('Get csv list failed');
+		}
 	}
 
 	getByrateId(request, response) {
@@ -173,42 +146,6 @@ class OrderController extends ControllerBase {
 		// }
 	}
 
-	orderProduct(request, response) {
-		// let deviceCode = request.param('device_code');
-		// this.buttonProvider.getByDeviceCode(deviceCode).then(device => {
-		// 	let [detail] = device;
-		// 	sails.log.info('id + apptoken', `${detail.rateId} + ${detail.appToken}`);
-		// 	let payload = {
-		// 		data: {
-		// 			title: 'Order Confirmation',
-		// 			message: `You just order ${detail.productname}`,
-		// 			deviceId: `${detail.id}`,
-		// 			productId: `${detail.productId}`
-		// 		},
-		// 		token: detail.appToken
-		// 	};
-		// 	return firebase.messaging().send(payload);
-		// }).then(res => {
-		// 	sails.log.info('firebase message success', res);
-		// 	response.status(204);
-		// 	return response.send();
-		// }).catch(err => {
-		// 	sails.log.error(err);
-		// 	return response.serverError('Cannot send this message');
-		// });
-	}
-
-	subcribeToOrderRoom(request, response) {
-		// if (request.isSocket) {
-		// 	sails.sockets.join(request, 'orderRoom');
-		// 	return response.json({
-		// 		room: 'join succeed'
-		// 	});
-		// }
-		// return response.json({
-		// 	socket: false
-		// });
-	}
 }
 
 module.exports = new OrderController().exports()
