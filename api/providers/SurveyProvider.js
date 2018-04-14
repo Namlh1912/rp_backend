@@ -55,7 +55,7 @@ class SurveyProvider {
 				questions.forEach(el => {
 					let answers = el.answer && el.answer.split('#@#');
 					el.answer = [];
-					answers && answers.forEach(ans => el.answer.push({ title: ans }));
+					answers && answers.forEach(ans => el.answer.push(ans));
 				});
 				survey.questions = questions;
 				return survey;
