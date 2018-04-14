@@ -132,7 +132,7 @@ class SurveyController extends ControllerBase {
 
 
 	update(request, response) {
-		const survey = response.body;
+		const survey = request.body;
 		let validateRes = this.validator.notEmpty(survey);
 		if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
 		this.surveyProvider.update(survey).then(() => {

@@ -14,7 +14,7 @@ class OrderDetailProvider {
 	}
 
 	list() {
-		return this._surveyDetail.getList();
+		return this.surveyDetailRepo.getList();
 	}
 
 	create(detail) {
