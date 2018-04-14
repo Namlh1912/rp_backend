@@ -533,30 +533,33 @@ Get user detail
 
 		{
 			"customer": {
-				"name": "KhoiNK",
-				"email":"Khoi@Khoi",
+				"name": "abc",
+				"email":"abc@abc",
 				"phone":"123456789",
 				"city":"HCMC",
 				"company":"First Interactive",
 				"business":"Dev"
 			},
-			"survey": [
-				{
-					"questionId": 28,
-					"surveyId": 10,
-					"answer": "Ngon vl"
-				},
-				{
-					"questionId": 29,
-					"answer": "đéo",
-					"surveyId": 10
-				}, 
-				{
-					"questionId": 30,
-					"answer": "Ừ",
-					"surveyId": 10
-				}
-			]
+			"survey": {
+				"title": "de de de",
+				"questions": [
+					{
+						"question": "ahihi",
+						"answer": "Ngon vl",
+						"customer": "abc"
+					},
+					{
+						"question": "Ngon không",
+						"answer": "Ngon vl",
+						"customer": "abc"
+					}, 
+					{
+						"question": "Bánh gì đây",
+						"answer": "bánh gấu chó",
+						"customer": "abc"
+					}
+				]
+			}
 		}
 
 + Response 204 (application/json)
