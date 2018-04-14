@@ -21,10 +21,7 @@ class QuestionRepository {
 	}
 
 	getBySurvey(id) {
-		return this._QuestionModel.queryAsync(`
-			select q.*, t.type from questions q
-			left outer join question_types t on q.questionType = t.id
-			where q.surveyId = ${id}`, [])
+		return Question.find({surveyId: id})
 			.then(res => res)
 			.catch(err => sails.log.error(err));
 	}

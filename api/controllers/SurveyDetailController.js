@@ -72,20 +72,6 @@ class SurveyController extends ControllerBase {
 			sails.log.error(err);
 			return response.serverError('Get brands list failed');
 		}
-		// if (list && list.length) {
-		// 	let brandProm = [];
-		// 	list.forEach(brand => {
-		// 		brand.products = [];
-		// 		brandProm.push(this.productProvider.getByCategory(brand.id));
-		// 	});
-		// 	let brandProducts = await Promise.all(brandProm);
-		// 	brandProducts.forEach(products => {
-		// 		if(products.length) {
-		// 			let index = list.findIndex(el => el.id == products[0].brandId);
-		// 			list[index].products = products;
-		// 		}
-		// 	});
-		// }
 	}
 }
 
