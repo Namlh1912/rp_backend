@@ -10,12 +10,22 @@ class SurveyDetailRepository {
 		return SurveyDetail.create(data);
 	}
 
-	getList() {
+	getListByQuestionId(id) {
 		return this._SurveyDetailModel.queryAsync(`
-			select q.description as question, sd.answer, c.name
+			select sd.answer, c.name, sd.questionId, q.description
+			from survey_details sd
+			left outer join customers c on sd.customerId = c.id
+			left outer join questions q on sd.questionId = q.id
+			where sd.questionId = ${id}
+		`, []);
+	}
+
+	getQuestion() {
+		return this._SurveyDetailModel.queryAsync(`
+			select q.description, q.id
 			from survey_details sd
 			left outer join questions q on sd.questionId = q.id
-			left outer join customers c on sd.customerId = c.id
+			group by sd.questionId
 		`, []);
 	}
 

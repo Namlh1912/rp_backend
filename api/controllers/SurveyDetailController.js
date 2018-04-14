@@ -1,10 +1,15 @@
 const moment = require('moment');
+// const Bluebird = require('bluebird-global');
+const json2csv = require('json2csv').Parser;
+// const Json2csvTransform = require('json2csv').Transform;
+// const fs = require('fs');
 
 const SurveyDetailProvider = require('../providers/SurveyDetailProvider');
 
 const CustomerProvider = require('../providers/CustomerProvider');
 const ControllerBase = require('./ControllerBase');
 const Validator = require('../validator/validation');
+// const json2csvAsync = Bluebird.promisifyAll(json2csv);
 
 class SurveyController extends ControllerBase {
 
@@ -23,10 +28,10 @@ class SurveyController extends ControllerBase {
 	}
 
 	get customerProvider() {
-		if (!this._provider) {
-			this._provider = new CustomerProvider();
+		if (!this._cusProvider) {
+			this._cusProvider = new CustomerProvider();
 		}
-		return this._provider;
+		return this._cusProvider;
 	}
 
 	get validator() {
@@ -67,10 +72,27 @@ class SurveyController extends ControllerBase {
 	async list(request, response) {
 		try {
 			let list = await this.surveyDetailProvider.list();
-			return response.ok(list);
+
+			const json2csvParser = new json2csv({ fields: list.headers });
+			let csv = json2csvParser.parse(list.data);
+
+			return response.ok(csv);
+			// const filename = "report-" + moment().format("YYYY-MM-DD") + ".csv";
+			// response.attachment(filename);
+			// return response.send(csv, 'UTF-8');
+			// json2csv(config, (err, csv) => {
+			// 	// if (err) console.log(err);
+			// 	// var filename = "report-" + moment().format("YYYY-MM-DD") + ".csv";
+			// 	// res.attachment(filename);
+			// 	// res.end(csv, 'UTF-8');
+			// 	var filename = "report-" + moment().format("YYYY-MM-DD") + ".csv";
+			// 	response.attachment(filename);
+			// 	return response.send(csv, 'UTF-8');
+			// });
+
 		} catch (err) {
 			sails.log.error(err);
-			return response.serverError('Get brands list failed');
+			return response.serverError('Get csv list failed');
 		}
 	}
 }
