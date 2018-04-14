@@ -77,19 +77,6 @@ class SurveyController extends ControllerBase {
 			let csv = json2csvParser.parse(list.data);
 
 			return response.ok(csv);
-			// const filename = "report-" + moment().format("YYYY-MM-DD") + ".csv";
-			// response.attachment(filename);
-			// return response.send(csv, 'UTF-8');
-			// json2csv(config, (err, csv) => {
-			// 	// if (err) console.log(err);
-			// 	// var filename = "report-" + moment().format("YYYY-MM-DD") + ".csv";
-			// 	// res.attachment(filename);
-			// 	// res.end(csv, 'UTF-8');
-			// 	var filename = "report-" + moment().format("YYYY-MM-DD") + ".csv";
-			// 	response.attachment(filename);
-			// 	return response.send(csv, 'UTF-8');
-			// });
-
 		} catch (err) {
 			sails.log.error(err);
 			return response.serverError('Get csv list failed');
