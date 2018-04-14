@@ -11,7 +11,12 @@ class SurveyDetailRepository {
 	}
 
 	getList() {
-		return SurveyDetail.find();
+		return this._SurveyDetailModel.queryAsync(`
+			select q.description as Question, sd.answer, c.name
+			from survey_details sd
+			left outer join questions q on sd.questionId = q.id
+			lef touter join customers c on sd.customerId = c.id
+		`, []);
 	}
 
 	getDetail(id) {

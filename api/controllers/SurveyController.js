@@ -39,12 +39,21 @@ class SurveyController extends ControllerBase {
 		let surveyData = request.body;
 		let validateRes = this.validator.notEmpty(surveyData);
 		if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
-		this.surveyProvider.create(surveyData)
-			.then(survey => response.ok(survey))
-			.catch(err => {
-				sails.log.error(err);
-				return response.serverError('Create Failed!');
-			});
+		try {
+			this.surveyProvider.create(surveyData)
+				.then(survey => {
+					if(survey) {
+						return response.ok(survey)
+					}
+					return response.badRequest();
+				})
+				.catch(err => {
+					sails.log.error(err);
+					return response.serverError('Create Failed!');
+				});
+		} catch(err) {
+			return response.badRequest(err.message);
+		}
 	}
 
 	detail(request, response) {

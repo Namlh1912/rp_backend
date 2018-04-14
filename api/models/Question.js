@@ -10,7 +10,7 @@ module.exports = {
 			required: true
 		},
 		questionType: {
-			type: 'integer',
+			type: 'string',
 			required: true
 		},
 		surveyId: {
@@ -18,8 +18,7 @@ module.exports = {
 			required: true
 		},
 		answer: {
-			type: 'string',
-			required: true
+			type: 'string'
 		}
 	},
 	autoCreatedAt: false,

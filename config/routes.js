@@ -77,7 +77,8 @@ module.exports.routes = {
 	'delete /surveys/:id': 'Survey.delete',
 
 	/************* BRANDS ***************/
-	'post /surveys-detail': 'SurveyDetail.create'
+	'post /surveys-detail': 'SurveyDetail.create',
+	'get /surveys-detail': 'SurveyDetail.list'
 
 	/***************************************************************************
 	*                                                                          *

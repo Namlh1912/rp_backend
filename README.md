@@ -56,7 +56,7 @@ Get asset detail
 
 Get visitor detail
 
-+ Response 200 (application/json)
++ Response 200 (form-data)
 
 		{
 			"name": "KhoiNK",
@@ -311,7 +311,7 @@ Load all brands.
 
 ## Rates
 
-### List All Orders [GET /orders/:column/asc || desc]
+### List All Rates [GET /orders/:column/asc || desc]
 - param column must match with database
 
 + Response 200 (application/json)

@@ -13,6 +13,10 @@ class OrderDetailProvider {
 		return this._surveyDetail;
 	}
 
+	list() {
+		return this._surveyDetail.getList();
+	}
+
 	create(detail) {
 		return this.surveyDetailRepo.create(detail);
 	}

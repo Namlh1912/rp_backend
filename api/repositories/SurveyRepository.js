@@ -8,7 +8,12 @@ class SurveyRepository {
 	}
 
 	create(data) {
-		return Survey.create(data);
+		return Survey.create(data)
+		.then(res => res)
+		.catch(err => {
+			sails.log.error(err.message);
+			return null;
+		});
 	}
 
 	getList() {
