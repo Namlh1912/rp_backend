@@ -33,47 +33,10 @@ class RateProvider {
 			}).catch(err => sails.log.error(err));
 	}
 
-	delete(id) {
-		return this.rateRepo.remove(id).then((group) => {
-			return group;
-		}).catch(err => {
-			sails.log.error(err);
-		});
+	list() {
+		return this.rateRepo.getList();
 	}
 
-	detail(id) {
-		return this.customerRepo.getDetail(id);
-	}
-
-	deleteThemeId(groupId) {
-		return this.customerRepo.deleteThemeId(groupId);
-	}
-
-	getByUserId(id) {
-		return this.customerRepo.getByUserId(id);
-	}
-
-	list(column, method) {
-		return this.customerRepo.getList(column, method);
-	}
-
-	searchNameByTheme(themeId, name) {
-		return this.customerRepo.searchName(themeId, name);
-	}
-
-	update(data) {
-		data.updatedAt = moment().utc().format(TIME_FORMAT);
-
-		return this.customerRepo.update(data).then(res => {
-			return res[0];
-		}).catch(err => {
-			sails.log.error(err);
-		});
-	}
-
-	updateThemeId(groupId, themeId) {
-		return this.customerRepo.updateThemeId(groupId, themeId);
-	}
 }
 
 module.exports = RateProvider;

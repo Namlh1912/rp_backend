@@ -1,16 +1,16 @@
 module.exports = {
 	tableName: 'survey_details',
 	attributes: {
-		surveyId: {
-			type: 'integer',
+		survey: {
+			type: 'string',
 			required: true
 		},
-		questionId: {
-			type: 'integer',
+		question: {
+			type: 'string',
 			required: true
 		},
-		customerId: {
-			type: 'integer',
+		customer: {
+			type: 'string',
 			required: true
 		},
 		answer: {

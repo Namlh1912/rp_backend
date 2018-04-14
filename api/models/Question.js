@@ -19,6 +19,10 @@ module.exports = {
 		},
 		answer: {
 			type: 'string'
+		},
+		status: {
+			type: 'boolean',
+			required: true
 		}
 	},
 	autoCreatedAt: false,

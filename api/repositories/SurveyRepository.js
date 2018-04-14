@@ -17,7 +17,7 @@ class SurveyRepository {
 	}
 
 	getList() {
-		return Survey.find({ sort: 'id DESC' })
+		return Survey.find({ sort: 'id DESC', status: 1 })
 			.then(res => {
 				return res;
 			})
@@ -27,14 +27,15 @@ class SurveyRepository {
 	}
 
 	getDetail(id) {
-		return Survey.findOne({ id });
+		return Survey.findOne({ id, status: 1 });
 	}
 
 	getByName(name) {
 		return Survey.find({
-			name: {
+			title: {
 				'like': `%${name}%`
-			}
+			},
+			status: 1
 		});
 	}
 

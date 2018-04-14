@@ -11,7 +11,13 @@ class RateRepository {
 	}
 
 	getList() {
-		return Rate.find();
+		return this._RateModel.queryAsync(`
+			select p.name as product, c.name as customer, r.rating as rate, r.feedback
+			from rates r
+			left outer join products p on r.productId = p.id
+			left outer join customers c on r.customerId = c.id
+			where p.status = 1 and c.status = 1
+		`, []);
 	}
 
 	getDetail(id) {
