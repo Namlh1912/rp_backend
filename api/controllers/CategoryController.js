@@ -93,10 +93,10 @@ class CategoryController extends ControllerBase {
 			if (res) {
 				return response.ok(res);
 			}
-			return response.notFound('Cannot find this button');
+			return response.notFound('Cannot find this category');
 		}).catch(err => {
-			response.serverError(`Update devices failed`);
 			sails.log.error(err);
+			return response.serverError(`Update Category failed`);
 		});
 	}
 }

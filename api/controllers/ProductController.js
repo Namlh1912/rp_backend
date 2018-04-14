@@ -54,7 +54,7 @@ class ProductController extends ControllerBase {
 			.then(product => response.ok(product))
 			.catch(err => {
 				sails.log.error(err);
-				response.serverError('Upload failed at uploading images!');
+				response.serverError(err.message);
 			});
 	}
 
@@ -109,11 +109,11 @@ class ProductController extends ControllerBase {
 	}
 
 	update(request, response) {
-		
+
 		this.productProvider.detail(request.body['id']).then(check => {
 			if (check) {
 				const validateRes = this.validator.notEmpty(request.body);
-			if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
+				if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
 				return this.productProvider.update(request.body);
 			}
 			return response.notFound('Cannot find this product');
@@ -149,9 +149,10 @@ class ProductController extends ControllerBase {
 				saveAs: this.saveAs.bind(this)
 			});
 		}).then(([file]) => {
+			if (!file) { return Promise.reject(new Error('File is not accepted')); }
 			const rejectFn = (msg) => {
 				return this._fileUtil.removeFile(file.fd)
-					.then(() => Promise.reject(new Error(msg)));
+				.then(() => Promise.reject(new Error(msg)));
 			};
 			let dataType = path.extname(file.filename);
 

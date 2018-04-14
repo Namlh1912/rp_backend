@@ -12,10 +12,22 @@ module.exports = {
 			type: 'integer',
 			primaryKey: true
 		},
-		name: 'string',
-		imgLink: 'string',
-		description: 'string',
-		categoryId: 'integer'
+		name: {
+			type: 'string',
+			required: true
+		},
+		imgLink: {
+			type: 'string',
+			required: true
+		},
+		description: {
+			type: 'string',
+			required: true
+		},
+		categoryId: {
+			type: 'integer',
+			required: true
+		}
 	},
 	autoCreatedAt: false,
 	autoUpdatedAt: false,

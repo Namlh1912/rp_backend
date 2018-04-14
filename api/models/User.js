@@ -12,8 +12,14 @@ module.exports = {
 			type: 'integer',
 			primaryKey: true,
 		},
-		username: 'string',
-		password: 'string'
+		username: {
+			type: 'string',
+			required: true
+		},
+		password: {
+			type: 'string',
+			required: true
+		}
 	},
 	autoCreatedAt: false,
 	autoUpdatedAt: false,

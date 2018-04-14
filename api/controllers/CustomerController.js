@@ -90,10 +90,13 @@ class CustomerController extends ControllerBase {
 		const validateRes = this.validator.notEmpty(customer);
 		if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`); }
 		this._provider.update(customer).then(updated => {
-			return response.ok(updated);
+			if(updated) {
+				return response.ok(updated);
+			}
+			return response.serverError('Cannot update Customer');
 		}).catch(err => {
 			sails.log.error(err);
-			return response.serverError('Cannot update Customer');
+			return response.serverError(err.message);
 		});
 	}
 }

@@ -8,10 +8,22 @@
 module.exports = {
 	tableName: 'rates',
 	attributes: {
-		productId: 'integer',
-		customerId: 'integer',
-		rating: 'float',
-		feedback: 'string'
+		productId: {
+			type: 'integer',
+			required: true
+		},
+		customerId: {
+			type: 'integer',
+			required: true
+		},
+		rating: {
+			type: 'float',
+			required: true
+		},
+		feedback: {
+			type: 'string',
+			required: true
+		}
 	},
 	autoCreatedAt: false,
 	autoUpdatedAt: false,

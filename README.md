@@ -558,9 +558,9 @@ Get user detail
 			"message": "Update failed"
 		}
 
-## Survey Detaul
+## Survey Detail
 
-### Login [POST /surveys-detail]
+### Create [POST /surveys-detail]
 
 + Request (application/json)
 

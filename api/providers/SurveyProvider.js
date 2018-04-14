@@ -73,11 +73,14 @@ class SurveyProvider {
 	}
 
 	update(data) {
-		data.updatedAt = moment().format(TIME_FORMAT);
+		const questions = data.questions;
+		let questionProm = [];
+		questions.forEach(ques => {
+			questionProm.push(ques);
+		});
 
-		return this.surveyRepo.update(data).then(res => {
-			return res[0];
-		}).catch(err => {
+		// surveyProm.push(this.surveyRepo.update(data))
+		return Promise.all([this.surveyRepo.update(data), questionProm]).then(res => res).catch(err => {
 			sails.log.error(err);
 			return err;
 		});

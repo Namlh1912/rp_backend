@@ -19,10 +19,7 @@ class CustomerRepository {
 	}
 
 	update(data) {
-		return Customer.update({ id: data.id }, {
-			name: data.name,
-			updatedAt: data.updatedAt
-		});
+		return Customer.update({ id: data.id }, data);
 	}
 
 	remove(id) {

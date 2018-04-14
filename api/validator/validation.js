@@ -3,7 +3,9 @@ class Validator {
 		if (Array.isArray(object)) {
 			if (!object.length) { return { result: false, key: object }; }
 			object.forEach(el => {
-				return this.notEmpty(el);
+				const res = this.notEmpty(el);
+				if (!res.result) { return { result: false, key: res.key }; }
+				// return ;
 			});
 		} else {
 			if (!object) { return { result: false, key: object }; }
@@ -13,17 +15,7 @@ class Validator {
 				}
 			}
 		}
-		// for (let key of object) {
-		// 	if (!Array.isArray(object[key])) {
-		// 		if (!object[key]) {
-		// 			return { result: false, key };
-		// 		}
-		// 	} else {
-		// 		object[key].forEach(el => {
-		// 			return this.notEmpty(el);
-		// 		});
-		// 	}
-		// }
+
 		return { result: true };
 	}
 }
