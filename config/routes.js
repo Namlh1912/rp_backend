@@ -44,8 +44,8 @@ module.exports.routes = {
 	'patch /products': 'Product.update',
 	'delete /products/:id': 'Product.delete',
 
-	/************* ORDERS ***************/
-	//   'get /orders/:column/:method': 'Order.list',
+	/************* RATES ***************/
+	'get /rates': 'Rate.list',
 	'post /rates': 'Rate.create',
 	//   'get /order-products/:device_code': 'Order.orderProduct',
 	//   'get /orders/:id': 'Order.detail',
@@ -76,9 +76,10 @@ module.exports.routes = {
 	'patch /surveys': 'Survey.update',
 	'delete /surveys/:id': 'Survey.delete',
 
-	/************* BRANDS ***************/
+	/************* SURVEY DETAIL ***************/
 	'post /surveys-detail': 'SurveyDetail.create',
 	'get /surveys-detail': 'SurveyDetail.list'
+
 
 	/***************************************************************************
 	*                                                                          *

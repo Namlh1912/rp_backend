@@ -3,6 +3,7 @@ const moment = require('moment');
 
 const SurveyRepository = require('../repositories/SurveyRepository');
 const QuestionRepository = require('../repositories/QuestionRepository');
+const QuestionProvider = require('./QuestionProvider');
 
 const TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -18,6 +19,13 @@ class SurveyProvider {
 			this._repo = new SurveyRepository();
 		}
 		return this._repo;
+	}
+
+	get questionProvider() {
+		if (!this._questionPro) {
+			this._questionPro = new QuestionProvider();
+		}
+		return this._questionPro;
 	}
 
 	get questionRepo() {
@@ -42,6 +50,7 @@ class SurveyProvider {
 			let questionProm = [];
 			questionsData.forEach(el => {
 				el.surveyId = newSurvey.id;
+				el.status = true;
 				questionProm.push(this.questionRepo.create(el));
 			});
 			return Promise.all(questionProm);
@@ -79,7 +88,8 @@ class SurveyProvider {
 		const questions = data.questions;
 		let questionProm = [];
 		questions.forEach(ques => {
-			questionProm.push(this.questionRepo.update(ques));
+			ques.surveyId = data.id;
+			questionProm.push(this.questionProvider.update(ques));
 		});
 
 		// surveyProm.push(this.surveyRepo.update(data))

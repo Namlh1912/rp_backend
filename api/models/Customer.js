@@ -29,6 +29,7 @@ module.exports = {
 			type: 'string',
 			required: true
 		},
+		status: 'boolean'
 	},
 	autoCreatedAt: false,
 	autoUpdatedAt: false,
