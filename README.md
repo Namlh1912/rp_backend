@@ -572,10 +572,10 @@ Get user detail
 
 + Response 200 (text/html)
 
-		"name","Ngon không?","Mày có đẹp trai không?","Mày xấu vl?"
-		"KhoiNK","Ngon vl","",""
-		"KhoiNK","Ngon vl","",""
-		"KhoiNK","","đéo",""
-		"KhoiNK","","đéo",""
-		"KhoiNK","","","Ừ"
-		"KhoiNK","","","Ừ"
+		"customer","survey","question","answer"
+		"abc","de de de","ahihi","Ngon vl"
+		"abc","de de de","Ngon không","Ngon vl"
+		"abc","de de de","Bánh gì đây","bánh gấu chó"
+		"abc","de de de","ahihi","Ngon vl"
+		"abc","de de de","ahihi","Ngon vl"
+		
