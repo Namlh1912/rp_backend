@@ -55,6 +55,7 @@ module.exports.routes = {
 
 	/************* CATEGORIES ***************/
 	'get /categories': 'Category.list',
+	'get /categories/name/:name': 'Category.listByName',
 	'post /categories': 'Category.create',
 	'get /categories/:id': 'Category.detail',
 	'patch /categories': 'Category.update',
@@ -74,11 +75,13 @@ module.exports.routes = {
 	'get /surveys': 'Survey.list',
 	'get /surveys/name/:name': 'Survey.searchByName',
 	'patch /surveys': 'Survey.update',
-	'delete /surveys/:id': 'Survey.delete',
 
 	/************* SURVEY DETAIL ***************/
 	'post /surveys-detail': 'SurveyDetail.create',
-	'get /surveys-detail': 'SurveyDetail.list'
+	'get /surveys-detail': 'SurveyDetail.list',
+
+	/************* FEDDBACK ***************/
+	'get /feedbacks': 'Feedback.list'
 
 
 	/***************************************************************************

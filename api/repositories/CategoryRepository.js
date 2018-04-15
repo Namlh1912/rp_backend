@@ -11,6 +11,15 @@ class CategoryRepository {
 		return this._CategoryModel.create(data);
 	}
 
+	getByName(name) {
+		return Survey.find({
+			name: {
+				'like': `%${name}%`
+			},
+			status: 1
+		});
+	}
+
 	getList() {
 		return this._CategoryModel.find({status: 1, sort: 'id DESC'});
 	}

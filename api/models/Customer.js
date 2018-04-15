@@ -6,30 +6,27 @@ module.exports = {
 			primaryKey: true
 		},
 		name: {
-			type: 'string',
-			required: true
+			type: 'string'
 		},
 		email: {
-			type: 'string',
-			required: true
+			type: 'string'
 		},
 		phone: {
-			type: 'string',
-			required: true
+			type: 'string'
 		},
 		city: {
-			type: 'string',
-			required: true
+			type: 'string'
 		},
 		company: {
-			type: 'string',
-			required: true
+			type: 'string'
 		},
 		business: {
-			type: 'string',
-			required: true
+			type: 'string'
 		},
-		status: 'boolean'
+		status: {
+			type: 'boolean',
+			defaultsTo: true
+		}
 	},
 	autoCreatedAt: false,
 	autoUpdatedAt: false,

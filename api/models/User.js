@@ -19,6 +19,10 @@ module.exports = {
 		password: {
 			type: 'string',
 			required: true
+		},
+		status: {
+			type: 'boolean',
+			defaultsTo: true
 		}
 	},
 	autoCreatedAt: false,

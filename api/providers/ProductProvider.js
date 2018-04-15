@@ -43,7 +43,6 @@ class ProductProvider {
 		return jimpReadAsync(path.join(IMG_PATH, product.imgLink)).then(jimpFile => {
 			return this.resizeImage(350, jimpFile, thumbnailPath);
 		}).then(() => {
-			product.stauts = 1;
 			return this.productRepo.create(product);
 		}).catch(err => {
 			let error = err;

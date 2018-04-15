@@ -581,4 +581,16 @@ Get user detail
 		"abc","de de de","Bánh gì đây","bánh gấu chó"
 		"abc","de de de","ahihi","Ngon vl"
 		"abc","de de de","ahihi","Ngon vl"
-		
+
+## FEEDBACKS
+
+### List [GET /surveys-detail]
+
+
++ Response 200 (text/html)
+
+		"customer","category","feedback"
+		"NamLH","drink","như cức"
+		"NamLH","drink","như cức"
+		"NamLH","drink","như cức"
+		"NamLH","drink","như cức"

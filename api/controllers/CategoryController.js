@@ -11,7 +11,7 @@ class CategoryController extends ControllerBase {
 	constructor() {
 		super();
 		this._exportedMethods = [
-
+			'listByName'
 		]
 	}
 
@@ -37,17 +37,22 @@ class CategoryController extends ControllerBase {
 	}
 
 	create(request, response) {
-		const category = request.body;
-		const validateRes = this.validator.notEmpty(category);
-		if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
-		this.categoryProvider.create(category)
-			.then(res => {
-				return response.ok(res);
-			})
-			.catch(err => {
-				sails.log.error(err);
-				response.serverError('Cannot create this category');
-			});
+		try {
+			const category = request.body;
+			const validateRes = this.validator.notEmpty(category);
+			if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
+			this.categoryProvider.create(category)
+				.then(res => {
+					return response.ok(res);
+				})
+				.catch(err => {
+					sails.log.error(err);
+					return response.serverError('Cannot create this category');
+				});
+		} catch(err) {
+			sails.log.error(err);
+			return response.badRequest();
+		}
 	}
 
 	delete(request, response) {
@@ -83,6 +88,26 @@ class CategoryController extends ControllerBase {
 				sails.log.error(err);
 				response.serverError('Get categories failed');
 			});
+	}
+
+	listByName(request, response) {
+		let name = request.param('name');
+		if (name) {
+			this.categoryProvider.listByName(name).then(res => {
+				if (res.length) {
+					return response.ok(res);
+				} else {
+					return response.notFound({
+						message: 'No matches'
+					});
+				}
+			}).catch(err => {
+				sails.log.error(new Error(err));
+				response.serverError({
+					message: 'No matches.'
+				})
+			});
+		}
 	}
 
 	update(request, response) {

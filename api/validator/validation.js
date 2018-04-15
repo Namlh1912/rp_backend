@@ -1,22 +1,33 @@
 class Validator {
 	notEmpty(object) {
+		let result = { result: true };
 		if (Array.isArray(object)) {
-			if (!object.length) { return { result: false, key: object }; }
+			if (!object.length) { 
+				result = { result: false, key: object };
+				return result;
+			}
 			object.forEach(el => {
 				const res = this.notEmpty(el);
-				if (!res.result) { return { result: false, key: res.key }; }
+				if (!res.result) { 
+					result = { result: false, key: res.key };
+					return result;
+				}
 				// return ;
 			});
 		} else {
-			if (!object) { return { result: false, key: object }; }
+			if (object === '' || object === undefined || object === null) {
+				result = { result: false, key: object };
+				return result;
+			}
 			for (let key of Object.keys(object)) {
-				if (!object[key]) {
-					return { result: false, key };
+				if (object[key] === '' || object[key] === null || object[key] === undefined) {
+					result = { result: false, key };
+					return result;
 				}
 			}
 		}
 
-		return { result: true };
+		return result;
 	}
 }
 
