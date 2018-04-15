@@ -40,11 +40,12 @@ class SurveyRepository {
 	}
 
 	update(data) {
-		return this._SurveyModel.update({ id: data.id }, data);
-	}
-
-	remove(SurveyId) {
-		return this._SurveyModel.destroyAsync({ id: SurveyId });
+		try {
+			return this._SurveyModel.update({ id: data.id }, data);
+		} catch(err) {
+			sails.log.error(err);
+			return null;
+		}
 	}
 
 }

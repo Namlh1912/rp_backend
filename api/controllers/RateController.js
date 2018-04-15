@@ -1,7 +1,7 @@
 const moment = require("moment");
 const json2csv = require('json2csv').Parser;
 
-const ProductProvider = require('../providers/ProductProvider');
+const FeedbackProvider = require('../providers/FeedbackProvider');
 const CustomerProvider = require('../providers/CustomerProvider');
 const RateProvider = require('../providers/RateProvider');
 const ControllerBase = require('./ControllerBase');
@@ -29,6 +29,13 @@ class OrderController extends ControllerBase {
 		return this._customerProvider
 	}
 
+	get feedbackProvider() {
+		if (!this._feedbackProvider) {
+			this._feedbackProvider = new FeedbackProvider();
+		}
+		return this._feedbackProvider;
+	}
+
 	get validator() {
 		if (!this._validator) {
 			this._validator = new Validator();
@@ -53,7 +60,12 @@ class OrderController extends ControllerBase {
 				el.customerId = cus.id;
 				rateProm.push(this.rateProvider.create(el));
 			});
-			return Promise.all(rateProm);
+			const feedback = {
+				customerId: cus.id,
+				categoryId: request.body['categoryId'],
+				feedback: request.body['feedback']
+			};
+			return Promise.all([Promise.all(rateProm), this.feedbackProvider.create(feedback)]);
 		}).then(() => {
 			response.status(204);
 			return response.send();
@@ -61,33 +73,6 @@ class OrderController extends ControllerBase {
 			sails.log.error(err);
 			return response.serverError('Cannot create rate.');
 		});
-	}
-
-	delete(request, response) { }
-
-	detail(request, response) {
-		// try {
-		// 	let id = parseInt(request.param('id'), 10);
-		// 	let [products, order] = await Promise.all([
-		// 		this.orderDetailProvider.getByOrderId(id),
-		// 		this.orderProvider.detail(id)
-		// 	]);
-		// 	if (order) {
-		// 		let newProducts = products.map(product => {
-		// 			delete product.orderId;
-		// 			let quantity = product.quantity;
-		// 			delete product.quantity;
-		// 			return { product, quantity }
-		// 		});
-		// 		order.productOrders = newProducts;
-		// 		return response.ok(order);
-		// 	}
-		// 	return response.notFound('Cannot find this order detail');
-		// }
-		// catch (err) {
-		// 	sails.log.error(err);
-		// 	return response.serverError('Cannot find this order detail');
-		// }
 	}
 
 	getNow() {
@@ -106,44 +91,6 @@ class OrderController extends ControllerBase {
 			sails.log.error(err);
 			return response.serverError('Get csv list failed');
 		}
-	}
-
-	getByrateId(request, response) {
-		// try {
-		// 	let rateId = request.param('id');
-		// 	let [rate, orders] = await Promise.all([
-		// 		this.rateProvider.detail(rateId)
-		// 		, this.orderProvider.getByrateId(rateId)
-		// 	]);
-		// 	if (orders && orders.length) {
-		// 		let orderProm = [];
-		// 		orders.forEach(order => {
-		// 			order.productOrders = [];
-		// 			order.ratename = rate.name;
-		// 			order.address = rate.address;
-		// 			orderProm.push(this.orderDetailProvider.getByOrderId(order.id));
-		// 		});
-		// 		let products = await Promise.all(orderProm);
-		// 		products.forEach(productArr => {
-		// 			let [product] = productArr;
-		// 			let index = product && orders.findIndex(el => el.id === product.orderId);
-		// 			if (index >= 0) {
-		// 				productArr.forEach(el => {
-		// 					delete el.orderId;
-		// 					let quantity = el.quantity;
-		// 					delete el.quantity;
-		// 					orders[index].productOrders.push({ product: el, quantity })
-		// 				});
-		// 			}
-		// 		});
-		// 		return response.ok(orders);
-		// 	}
-		// 	return response.notFound('Cannot find any orders');
-		// }
-		// catch (err) {
-		// 	sails.log.error(err);
-		// 	return response.serverError('Cannot find any orders');
-		// }
 	}
 
 }

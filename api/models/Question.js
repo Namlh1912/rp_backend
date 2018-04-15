@@ -22,7 +22,7 @@ module.exports = {
 		},
 		status: {
 			type: 'boolean',
-			required: true
+			defaultsTo: true
 		}
 	},
 	autoCreatedAt: false,

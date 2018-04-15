@@ -16,7 +16,10 @@ module.exports = {
 			type: 'string',
 			required: true
 		},
-		status: 'boolean'
+		status: {
+			type: 'boolean',
+			defaultsTo: true
+		}
 	},
 	autoCreatedAt: false,
 	autoUpdatedAt: false,

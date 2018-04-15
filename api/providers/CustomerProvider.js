@@ -19,7 +19,6 @@ class CustomerProvider {
 	}
 
 	create(data) {
-		data.status = 1;
 		return this.customerRepo.create(data)
 			.then(res => {
 				return res;

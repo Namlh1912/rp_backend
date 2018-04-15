@@ -28,7 +28,10 @@ module.exports = {
 			type: 'integer',
 			required: true
 		},
-		status: 'boolean'
+		status: {
+			type: 'boolean',
+			defaultsTo: true
+		}
 	},
 	autoCreatedAt: false,
 	autoUpdatedAt: false,
