@@ -123,6 +123,28 @@ Load all categories.
 			"message": "Get category list failed"
 		}
 
+### List CATEGORY By name [GET /categories/name/:name]
+Load categories by name.
+
++ Response 200 (application/json)
+
+		[
+			{
+				"id": 2,
+				"name": "drink"
+			},
+			{
+				"id": 1,
+				"name": "food"
+			}
+		]
+
++ Reponse 500 (application/json) 
+
+		{
+			"message": "No matches."
+		}
+
 ### Update Categories [PATCH /categories]
 
 + Request (application/json)
@@ -213,6 +235,28 @@ Load all brands.
 
 		{
 			"message": "Get surveys list failed"
+		}
+
+### List Surveys By Name [GET /surveys/name/:name]
+Load surveys by name.
+
++ Response 200 (application/json)
+
+		[		
+			{
+				"id": 10,
+				"title": "food"
+			},
+			{
+				"id": 9,
+				"title": "food"
+			}
+		]
+
++ Reponse 500 (application/json) 
+
+		{
+			"message": "No matches"
 		}
 
 ### Update Surveys [PATCH /surveys]

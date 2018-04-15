@@ -12,7 +12,7 @@ class CategoryRepository {
 	}
 
 	getByName(name) {
-		return Survey.find({
+		return Category.find({
 			name: {
 				'like': `%${name}%`
 			},
