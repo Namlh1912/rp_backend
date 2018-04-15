@@ -1,8 +1,4 @@
-const moment = require('moment');
-// const Bluebird = require('bluebird-global');
-
 const QuestionProvider = require('../providers/QuestionProvider');
-const ProductProvider = require('../providers/ProductProvider');
 const ControllerBase = require('./ControllerBase');
 const Validator = require('../validator/validation');
 

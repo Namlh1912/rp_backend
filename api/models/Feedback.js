@@ -6,10 +6,9 @@ module.exports = {
 			required: true
 		},
 		customerId: {
-			type: 'integer',
-			required: true
+			type: 'integer'
 		},
-		surveyId: {
+		categoryId: {
 			type: 'integer',
 			required: true
 		}

@@ -10,8 +10,7 @@ module.exports = {
 			required: true
 		},
 		customer: {
-			type: 'string',
-			required: true
+			type: 'string'
 		},
 		answer: {
 			type: 'string',

@@ -49,14 +49,13 @@ class SurveyController extends ControllerBase {
 		const customer = request.body['customer'];
 		validateRes = this.validator.notEmpty(customer);
 		if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
-		let surveyDetailProm = [];
+
 		surveyData.questions.forEach(sur => {
 			sur.survey = surveyData.title;
-			surveyDetailProm.push(this.surveyDetailProvider.create(sur));
 		});
 		Promise.all([
 			this.customerProvider.create(customer),
-			Promise.all(surveyDetailProm)
+			this.surveyDetailProvider.create(surveyData.questions)
 		]).then(() => {
 			response.status(204);
 			return response.send();

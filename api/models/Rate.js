@@ -13,15 +13,10 @@ module.exports = {
 			required: true
 		},
 		customerId: {
-			type: 'integer',
-			required: true
+			type: 'integer'
 		},
 		rating: {
 			type: 'float',
-			required: true
-		},
-		feedback: {
-			type: 'string',
 			required: true
 		}
 	},

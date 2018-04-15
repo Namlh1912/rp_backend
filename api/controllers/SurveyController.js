@@ -69,34 +69,6 @@ class SurveyController extends ControllerBase {
 		});
 	}
 
-	delete(request, response) {
-		// let id = parseInt(request.param('id'));
-
-		// this.groupProvider.getGroupByTheme(id)
-		// 	.then(groups => {
-		// 		if (groups.length) {
-		// 			return {
-		// 				message: 'The following theme are used by other groups',
-		// 				themes: groups
-		// 			};
-		// 		}
-		// 		return this.surveyProvider.delete(id);
-		// 	})
-		// 	.then(deleted => {
-		// 		if (Array.isArray(deleted)) {
-		// 			response.ok({
-		// 				data: deleted
-		// 			});
-		// 		} else {
-		// 			response.forbidden(deleted);
-		// 		}
-		// 	})
-		// 	.catch(err => {
-		// 		sails.log.error(err);
-		// 		return response.serverError('Cannot remove this theme');
-		// 	});
-	}
-
 	getNow() {
 		return moment().utc();
 	}
@@ -129,7 +101,6 @@ class SurveyController extends ControllerBase {
 			});
 		}
 	}
-
 
 	update(request, response) {
 		const survey = request.body;

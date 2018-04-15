@@ -14,6 +14,7 @@ class CategoryProvider {
 	}
 
 	create(data) {
+		// data.status = 1;
 		return this.categoryRepo.create(data);
 	}
 
@@ -27,6 +28,10 @@ class CategoryProvider {
 
 	list() {
 		return this.categoryRepo.getList();
+	}
+
+	listByName(name) {
+		return this.categoryRepo.getByName(name);
 	}
 
 	update(data) {

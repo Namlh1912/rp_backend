@@ -43,17 +43,16 @@ class SurveyProvider {
 		const questionsData = data.questions;
 		let survey;
 		return this.surveyRepo.create(data).then(newSurvey => {
-			if(!data) {
-				return null;
+			if (!data) {
+				return Promise.reject(`Some field is missing`);
 			}
 			survey = newSurvey;
-			let questionProm = [];
+			// let questionProm = [];
 			questionsData.forEach(el => {
 				el.surveyId = newSurvey.id;
-				el.status = true;
-				questionProm.push(this.questionRepo.create(el));
+				// questionProm.push();
 			});
-			return Promise.all(questionProm);
+			return this.questionRepo.create(questionsData);
 		}).then(() => survey)
 			.catch(err => sails.log.error(err));
 	}
@@ -86,19 +85,27 @@ class SurveyProvider {
 
 	update(data) {
 		const questions = data.questions;
-		let questionProm = [];
+		let questionUpdateProm = [];
+		let questionCreateProm = [];
 		questions.forEach(ques => {
 			ques.surveyId = data.id;
-			questionProm.push(this.questionProvider.update(ques));
+			if (ques.id) {
+				questionUpdateProm.push(this.questionRepo.update(ques));
+			} else {
+				questionCreateProm.push(this.questionRepo.create(ques));
+			}
 		});
 
 		// surveyProm.push(this.surveyRepo.update(data))
-		return Promise.all([this.surveyRepo.update(data), Promise.all(questionProm)]).then(res => {
-			return res;
-		}).catch(err => {
-			sails.log.error(err);
-			return err;
-		});
+		return Promise.all([
+			this.surveyRepo.update(data),
+			Promise.all(questionUpdateProm),
+			Promise.all(questionCreateProm)]).then(res => {
+				return res;
+			}).catch(err => {
+				sails.log.error(err);
+				return err;
+			});
 	}
 }
 

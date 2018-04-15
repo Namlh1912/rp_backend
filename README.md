@@ -123,6 +123,28 @@ Load all categories.
 			"message": "Get category list failed"
 		}
 
+### List CATEGORY By name [GET /categories/name/:name]
+Load categories by name.
+
++ Response 200 (application/json)
+
+		[
+			{
+				"id": 2,
+				"name": "drink"
+			},
+			{
+				"id": 1,
+				"name": "food"
+			}
+		]
+
++ Reponse 500 (application/json) 
+
+		{
+			"message": "No matches."
+		}
+
 ### Update Categories [PATCH /categories]
 
 + Request (application/json)
@@ -213,6 +235,28 @@ Load all brands.
 
 		{
 			"message": "Get surveys list failed"
+		}
+
+### List Surveys By Name [GET /surveys/name/:name]
+Load surveys by name.
+
++ Response 200 (application/json)
+
+		[		
+			{
+				"id": 10,
+				"title": "food"
+			},
+			{
+				"id": 9,
+				"title": "food"
+			}
+		]
+
++ Reponse 500 (application/json) 
+
+		{
+			"message": "No matches"
 		}
 
 ### Update Surveys [PATCH /surveys]
@@ -533,30 +577,33 @@ Get user detail
 
 		{
 			"customer": {
-				"name": "KhoiNK",
-				"email":"Khoi@Khoi",
+				"name": "abc",
+				"email":"abc@abc",
 				"phone":"123456789",
 				"city":"HCMC",
 				"company":"First Interactive",
 				"business":"Dev"
 			},
-			"survey": [
-				{
-					"questionId": 28,
-					"surveyId": 10,
-					"answer": "Ngon vl"
-				},
-				{
-					"questionId": 29,
-					"answer": "đéo",
-					"surveyId": 10
-				}, 
-				{
-					"questionId": 30,
-					"answer": "Ừ",
-					"surveyId": 10
-				}
-			]
+			"survey": {
+				"title": "de de de",
+				"questions": [
+					{
+						"question": "ahihi",
+						"answer": "Ngon vl",
+						"customer": "abc"
+					},
+					{
+						"question": "Ngon không",
+						"answer": "Ngon vl",
+						"customer": "abc"
+					}, 
+					{
+						"question": "Bánh gì đây",
+						"answer": "bánh gấu chó",
+						"customer": "abc"
+					}
+				]
+			}
 		}
 
 + Response 204 (application/json)
@@ -572,10 +619,22 @@ Get user detail
 
 + Response 200 (text/html)
 
-		"name","Ngon không?","Mày có đẹp trai không?","Mày xấu vl?"
-		"KhoiNK","Ngon vl","",""
-		"KhoiNK","Ngon vl","",""
-		"KhoiNK","","đéo",""
-		"KhoiNK","","đéo",""
-		"KhoiNK","","","Ừ"
-		"KhoiNK","","","Ừ"
+		"customer","survey","question","answer"
+		"abc","de de de","ahihi","Ngon vl"
+		"abc","de de de","Ngon không","Ngon vl"
+		"abc","de de de","Bánh gì đây","bánh gấu chó"
+		"abc","de de de","ahihi","Ngon vl"
+		"abc","de de de","ahihi","Ngon vl"
+
+## FEEDBACKS
+
+### List [GET /surveys-detail]
+
+
++ Response 200 (text/html)
+
+		"customer","category","feedback"
+		"NamLH","drink","như cức"
+		"NamLH","drink","như cức"
+		"NamLH","drink","như cức"
+		"NamLH","drink","như cức"

@@ -96,20 +96,7 @@ class ProductController extends ControllerBase {
 			});
 	}
 
-	listByBrand(request, response) {
-		let brandId = parseInt(request.param('brand_id'));
-
-		this.productProvider.listByBrand(brandId).then(products => {
-			if (products && products.length) { return response.ok(products); }
-			return response.notFound('Cannot find any products');
-		}).catch(err => {
-			sails.log.error(err);
-			return response.serverError(err);
-		});
-	}
-
 	update(request, response) {
-
 		this.productProvider.detail(request.body['id']).then(check => {
 			if (check) {
 				const validateRes = this.validator.notEmpty(request.body);
