@@ -97,7 +97,7 @@ class CategoryController extends ControllerBase {
 				if (res.length) {
 					return response.ok(res);
 				} else {
-					return response.notFound({
+					return response.badRequest({
 						message: 'No matches'
 					});
 				}
@@ -118,7 +118,7 @@ class CategoryController extends ControllerBase {
 			if (res) {
 				return response.ok(res);
 			}
-			return response.notFound('Cannot find this category');
+			return response.badRequest('Cannot find this category');
 		}).catch(err => {
 			sails.log.error(err);
 			return response.serverError(`Update Category failed`);

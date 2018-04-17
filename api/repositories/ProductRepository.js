@@ -31,6 +31,10 @@ class ProductRepository {
 		return Product.destroy({ id: id });
 	}
 
+	removeByCat(id) {
+		return Product.update({ categoryId: id }, { status: 0 });
+	}
+
 	update(index, data) {
 		return Product.update(index, data);
 	}

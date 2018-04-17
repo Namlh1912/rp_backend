@@ -51,7 +51,7 @@ class ProductProvider {
 	}
 
 	delete(id) {
-		return this.productRepo.update({ id }, { status: PRODUCT_STATUS.unavailable });
+		return this.productRepo.update({ id }, { status: 0 });
 	}
 
 	detail(id) {

@@ -9,24 +9,6 @@
 # Products
 - serveraddress/images/upload/[thumbnail-]imgLink
 
-## DELETE API
-- For every API
-
-+ Request (application/json)
-
-		{
-			"id": 7,
-			"status": false | 0
-		}
-
-+ Response 204 (application/json)
-
-+ Response 500 (application/json)
-
-		{
-			"message":"Update 'model' failed"
-		}
-
 ## PRODUCTS 
 
 ### List All PRODUCTS [GET /products]

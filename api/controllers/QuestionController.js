@@ -40,7 +40,7 @@ class QuestionController extends ControllerBase {
 			if (res) {
 				return response.ok(res);
 			}
-			return response.notFound('Cannot find this question');
+			return response.badRequest('Cannot find this question');
 		}).catch(err => {
 			sails.log.error(err);
 			return response.serverError(`Update question failed`);

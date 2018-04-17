@@ -40,6 +40,10 @@ class QuestionRepository {
 		});
 	}
 
+	removeBySurveyId(id) {
+		return Question.update({ surveyId: id }, { status: 0 });
+	}
+
 	update(data) {
 		return Question.update({
 			id: data.id

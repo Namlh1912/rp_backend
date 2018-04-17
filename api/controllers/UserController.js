@@ -98,7 +98,7 @@ class UserController extends ControllerBase {
 	login(request, response) {
 		let client = request.body;
 		if (!client.username || !client.password) {
-			return response.notFound('Cannot find this user');
+			return response.badRequest('Cannot find this user');
 		}
 		this.userProvider.login(client).then(user => {
 			if (!user) {

@@ -75,6 +75,7 @@ module.exports.routes = {
 	'get /surveys': 'Survey.list',
 	'get /surveys/name/:name': 'Survey.searchByName',
 	'patch /surveys': 'Survey.update',
+	'delete /surveys/:id': 'Survey.delete',
 
 	/************* SURVEY DETAIL ***************/
 	'post /surveys-detail': 'SurveyDetail.create',

@@ -1,3 +1,4 @@
+const ProductRepository = require('../repositories/productRepository');
 const CategoryRepository = require('../repositories/CategoryRepository');
 
 class CategoryProvider {
@@ -13,13 +14,24 @@ class CategoryProvider {
 		return this._repo;
 	}
 
+	get productRepo() {
+		if (!this._productRepo) {
+			this._productRepo = new ProductRepository();
+		}
+		return this._productRepo;
+	}
+
 	create(data) {
 		// data.status = 1;
 		return this.categoryRepo.create(data);
 	}
 
 	delete(id) {
-		return this.categoryRepo.remove(id);
+		let index = { id };
+		return Promise.all([
+			this.categoryRepo.update({ status: 0 }, index),
+			this._productRepo.removeByCat(id)
+		]);
 	}
 
 	detail(id) {

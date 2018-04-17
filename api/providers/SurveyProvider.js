@@ -1,11 +1,10 @@
+
 // const Bluebird = require('bluebird-global');
 const moment = require("moment");
 
 const SurveyRepository = require("../repositories/SurveyRepository");
 const QuestionRepository = require("../repositories/QuestionRepository");
 const QuestionProvider = require("./QuestionProvider");
-
-const TIME_FORMAT = "YYYY-MM-DD HH:mm:ss";
 
 class SurveyProvider {
 
@@ -70,12 +69,10 @@ class SurveyProvider {
 	}
 
 	delete(id) {
-		return this.themeDetailRepo.removeByTheme(id).then(() => {
-			return this.surveyRepo.remove(id);
-		}).catch(err => {
-			sails.log.error(err);
-			return err;
-		});
+		return Promise.all([
+			this._repo.update({ id, status: 0 })
+			, this._questionRepo.removeBySurveyId(id)
+		]);
 	}
 
 	getByName(name) {

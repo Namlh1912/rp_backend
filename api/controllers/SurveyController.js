@@ -56,13 +56,20 @@ class SurveyController extends ControllerBase {
 		}
 	}
 
+	delete(request, response) {
+		let id = parseInt(request.param('id'), 10);
+		this._provider.delete(id).then(([res]) => {
+			return response.ok(res);
+		}).catch(err => response.serverError(err));
+	}
+
 	detail(request, response) {
 		let id = parseInt(request.param('id'), 10);
 		this.surveyProvider.detail(id).then(detail => {
 			if (detail) {
 				return response.ok(detail)
 			}
-			return response.notFound();
+			return response.badRequest();
 		}).catch(err => {
 			response.serverError(`Get survey id ${id} failed`);
 			sails.log.error(err);
@@ -89,7 +96,7 @@ class SurveyController extends ControllerBase {
 				if (res.length) {
 					return response.ok(res);
 				} else {
-					return response.notFound({
+					return response.badRequest({
 						message: 'No matches'
 					});
 				}

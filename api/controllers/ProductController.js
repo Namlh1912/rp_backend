@@ -103,7 +103,7 @@ class ProductController extends ControllerBase {
 				if (!validateRes.result) { return response.badRequest(`Missing key ${validateRes.key}`) }
 				return this.productProvider.update(request.body);
 			}
-			return response.notFound('Cannot find this product');
+			return response.badRequest('Cannot find this product');
 		}).then(product => {
 			if (product.id) { return response.ok(product); }
 		}).catch(err => {
@@ -119,7 +119,7 @@ class ProductController extends ControllerBase {
 			if (products && products.length) {
 				return response.ok(products);
 			}
-			return response.notFound('Cannot find any matches')
+			return response.badRequest('Cannot find any matches')
 		}).catch(err => {
 			sails.log.error(err);
 			return response.serverError('Cannot find any matches');
