@@ -9,8 +9,8 @@ module.exports = {
 			type: 'string',
 			required: true
 		},
-		customer: {
-			type: 'string'
+		customerId: {
+			type: 'integer'
 		},
 		answer: {
 			type: 'string',

@@ -48,7 +48,7 @@ class SurveyProvider {
 			}
 			survey = newSurvey;
 			// let questionProm = [];
-			questionsData.forEach(el => {
+			questionsData && questionsData.forEach(el => {
 				el.surveyId = newSurvey.id;
 				// questionProm.push();
 			});
@@ -87,7 +87,7 @@ class SurveyProvider {
 		const questions = data.questions;
 		let questionUpdateProm = [];
 		let questionCreateProm = [];
-		questions.forEach(ques => {
+		questions && questions.forEach(ques => {
 			ques.surveyId = data.id;
 			if (ques.id) {
 				questionUpdateProm.push(this.questionRepo.update(ques));
