@@ -12,7 +12,8 @@ class SurveyDetailRepository {
 
 	getList() {
 		return this._SurveyDetailModel.queryAsync(`
-			select * from survey_details
+			select c.name as customer, c.company, c.phone, c.city, c.business, sd.* from survey_details sd
+			left outer join customers c on c.id = sd.customerId
 		`, []);
 	}
 
