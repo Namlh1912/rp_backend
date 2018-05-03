@@ -46,14 +46,14 @@ class OrderController extends ControllerBase {
   create(request, response) {
     const customer = request.body["customer"];
     // if (!customer) { return response.badRequest(`Missing field customer`); }
-    let validateRes = this.validator.notEmpty(customer);
-    if (!validateRes.result) {
-      return response.badRequest(`Missing key ${validateRes.key}`);
-    }
+    // let validateRes = this.validator.notEmpty(customer);
+    // if (!validateRes.result) {
+    //   return response.badRequest(`Missing key ${validateRes.key}`);
+    // }
 
     const rates = request.body["rates"];
     // if (!rates) { return response.badRequest(`Missing field rate`); }
-    validateRes = this.validator.notEmpty(rates);
+    let validateRes = this.validator.notEmpty(rates);
     if (!validateRes.result) {
       return response.badRequest(`Missing key ${validateRes.key}`);
     }
@@ -93,7 +93,7 @@ class OrderController extends ControllerBase {
   async list(request, response) {
     try {
       let list = await this.rateProvider.list();
-      const fields = ["customer", "email", "phone", "product", "rate"];
+      const fields = ["customers", "email", "phone", "product", "rate", "feedback"];
       const json2csvParser = new json2csv({ fields });
       let csv = json2csvParser.parse(list);
 
