@@ -93,7 +93,7 @@ class OrderController extends ControllerBase {
   async list(request, response) {
     try {
       let list = await this.rateProvider.list();
-      const fields = ["customers", "email", "phone", "product", "rate", "feedback"];
+      const fields = ["customers", "email", "phone", "product", "rate"];
       const json2csvParser = new json2csv({ fields });
       let csv = json2csvParser.parse(list);
 
