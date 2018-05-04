@@ -1,10 +1,5 @@
-const moment = require('moment');
-
 const CustomerRepository = require('../repositories/CustomerRepository');
 const RateRepository = require('../repositories/RateRepository');
-
-const TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
-
 
 class RateProvider {
 
